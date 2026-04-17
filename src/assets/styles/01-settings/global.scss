@@ -6,23 +6,42 @@ $main-text-color: var(--main-text-color);
 
 :root {
   --infinte-color: #c9c9c9;
-  --main-text-color: #231f1e;
-  --main-text-color-dark: #2b2d34;
+  --main-text-color: #ffffff;
+  --main-text-color-dark: #a0a0a0;
 
-  /* current */
-  --color-primary: #5cd5c4;
-  --color-primary: #414042;
-  --color-primary-d: #272628;
-  --color-primary-l: #676668;
+  /* Dark Mode Colors */
+  --color-primary: #dbff00;
+  --color-primary-dark: #b8dd00;
+  --color-primary-light: #e8ff4d;
+  --color-primary-d: #0d0d0d;
+  --color-primary-l: #1a1a1a;
   --color-primary-reverse: #ff6767;
-  --color-text: #7c8082;
-  --bg-gray: #c6c7ce1a;
-  --color-grey: #f5f7f9;
-  --color-light-grey: #eeeeee;
+  
+  /* Background Colors */
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #262626;
+  --bg-card: #1a1a1a;
+  
+  /* Text Colors */
+  --color-text: #ffffff;
+  --color-text-secondary: #a0a0a0;
+  --color-text-muted: #666666;
+  --color-text-inverse: #0d0d0d;
+  
+  /* UI Colors */
+  --bg-gray: #262626;
+  --color-grey: #1a1a1a;
+  --color-light-grey: #404040;
+  --border-color: #333333;
+  
+  /* Neon Effects */
+  --neon-glow: 0 0 10px #dbff00, 0 0 20px #dbff00, 0 0 30px #dbff00;
+  
   /* font-size */
   --font-sm: 0.8685714286rem;
-  /* font-family: ; */
-  --font-main: "DINNextLTArabic";
+  /* font-family */
+  --font-main: "Cairo", "Tajawal", sans-serif;
 
   /* plugins */
   --mm-ocd-width: calc(100% - 51px);

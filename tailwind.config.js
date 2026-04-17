@@ -17,11 +17,14 @@ module.exports = {
         },
         fontFamily: {
             sans: [
+                'Cairo',
+                'Tajawal',
                 'var(--font-main)',
                 '-apple-system',
                 'BlinkMacSystemFont',
+                'sans-serif'
             ],
-            primary: "var(--font-main)"
+            primary: "Cairo, Tajawal, var(--font-main), sans-serif"
         },
         extend    : {
             transitionTimingFunction: {
@@ -31,10 +34,20 @@ module.exports = {
                 'auto-fill'  : 'repeat(auto-fill, 290px)',
             },
             colors             : {
-                'dark'         : '#1D1F1F',
-                'darker'       : '#0E0F0F',
+                'dark'         : '#0d0d0d',
+                'darker'       : '#000000',
+                'light'        : '#ffffff',
+                'neon'         : '#dbff00',
+                'neon-dark'    : '#b8dd00',
                 'danger'       : '#AE0A0A',
-                'primary-dark' : 'var(--color-primary-dark)'
+                'primary-dark' : 'var(--color-primary-dark)',
+                // Custom dark mode colors
+                'bg-primary'   : '#0d0d0d',
+                'bg-secondary' : '#1a1a1a',
+                'bg-tertiary'  : '#262626',
+                'text-primary' : '#ffffff',
+                'text-secondary': '#a0a0a0',
+                'text-muted'   : '#666666'
             },
             spacing: {
               '3.75': '15px',
