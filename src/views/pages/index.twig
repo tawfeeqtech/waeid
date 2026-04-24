@@ -7,7 +7,7 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    {% component home %}
+    {% include "pages/funnel-landing.twig" %}
 {% endblock %}
 {% block scripts %}
     <script defer src="{{ 'home.js' | asset }}"></script>
