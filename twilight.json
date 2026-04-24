@@ -119,6 +119,46 @@
             "selected": true
         },
         {
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "Header Size",
+            "description": "Choose header size display",
+            "id": "header_size",
+            "icon": "sicon-layout-header",
+            "selected": [
+                {
+                    "label": "Header Large",
+                    "value": "large",
+                    "key": "header-large-key"
+                }
+            ],
+            "options": [
+                {
+                    "label": "Header Large",
+                    "value": "large",
+                    "key": "header-large-key"
+                },
+                {
+                    "label": "Header Small",
+                    "value": "small",
+                    "key": "header-small-key"
+                }
+            ],
+            "source": "Manual",
+            "required": false
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-search",
+            "label": "Show Search Bar",
+            "description": "Display or hide search bar in header",
+            "id": "show_search_bar",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
             "type": "boolean",
             "icon": "sicon-toggle-off",
             "label": "تفعيل قائمة المزيد في القائمة الرئيسية",

@@ -63,6 +63,11 @@
     {% if theme.settings.get('enable_add_product_toast', true) %}
         <script defer src="{{ 'add-product-toast.js'|asset }}"></script>
     {% endif %}
+    
+    <!-- Funnel System Scripts -->
+    <script defer src="{{ 'theme-toggle.js'|asset }}"></script>
+    <script defer src="{{ 'funnel-analytics.js'|asset }}"></script>
+    <script defer src="{{ 'dynamic-funnel.js'|asset }}"></script>
 
     {% block head_scripts %}{% endblock %}
 

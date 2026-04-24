@@ -4,7 +4,52 @@ $main-color: var(--color-primary);
 $infinte-color: var(--infinte-color);
 $main-text-color: var(--main-text-color);
 
+/* Light Mode (Default) */
 :root {
+  --infinte-color: #666666;
+  --main-text-color: #333333;
+  --main-text-color-dark: #666666;
+
+  /* Light Mode Colors */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  --color-primary-d: #ffffff;
+  --color-primary-l: #f8fafc;
+  --color-primary-reverse: #ef4444;
+  
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  
+  /* Text Colors */
+  --color-text: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-text-inverse: #ffffff;
+  
+  /* UI Colors */
+  --bg-gray: #f3f4f6;
+  --color-grey: #e5e7eb;
+  --color-light-grey: #d1d5db;
+  --border-color: #d1d5db;
+  
+  /* Neon Effects (Light Mode - Subtle) */
+  --neon-glow: 0 0 5px #2563eb, 0 0 10px #2563eb;
+  
+  /* font-size */
+  --font-sm: 0.8685714286rem;
+  /* font-family */
+  --font-main: "Cairo", "Tajawal", sans-serif;
+
+  /* plugins */
+  --mm-ocd-width: calc(100% - 51px);
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
   --infinte-color: #c9c9c9;
   --main-text-color: #ffffff;
   --main-text-color-dark: #a0a0a0;
@@ -35,14 +80,44 @@ $main-text-color: var(--main-text-color);
   --color-light-grey: #404040;
   --border-color: #333333;
   
-  /* Neon Effects */
+  /* Neon Effects (Dark Mode - Strong) */
   --neon-glow: 0 0 10px #dbff00, 0 0 20px #dbff00, 0 0 30px #dbff00;
-  
-  /* font-size */
-  --font-sm: 0.8685714286rem;
-  /* font-family */
-  --font-main: "Cairo", "Tajawal", sans-serif;
+}
 
-  /* plugins */
-  --mm-ocd-width: calc(100% - 51px);
+/* Theme Transition */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark Mode Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: var(--font-main);
+  font-size: 14px;
+  color: var(--color-text);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle:active {
+  transform: translateY(0);
+}
+
+/* RTL Support */
+[dir="rtl"] .theme-toggle {
+  right: auto;
+  left: 20px;
 }

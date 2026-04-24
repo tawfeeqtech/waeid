@@ -64,6 +64,8 @@
 /* Main Nav */
 .main-nav-container {
   @apply min-h-[68px] lg:min-h-[84px];
+  background-color: #000000;
+  border-bottom: 1px solid #dbff00;
   
   // Custom background Color
   .has-bg &,
@@ -78,7 +80,8 @@
 }
 
 .menu-item {
-  @apply flex items-center px-6 py-2.5 sm:text-sm text-gray-500 transition-colors duration-300 hover:bg-gray-200/30;
+  @apply flex items-center px-6 py-2.5 sm:text-sm text-white transition-colors duration-300 hover:bg-gray-200/30;
+  font-family: 'Tajawal', sans-serif;
 
   &.logout{
     @apply text-red-400;
@@ -86,6 +89,10 @@
 
   &.is-active{
     @apply text-primary bg-gray-200/20;
+  }
+  
+  &:hover{
+    color: #dbff00;
   }
 }
 
@@ -155,7 +162,10 @@
   @apply border-none outline-none transition-opacity hover:opacity-80;
 
   &__icon{
-    @apply text-xl w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-700;
+    @apply text-xl w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center;
+    color: #dbff00;
+    border-color: #dbff00;
+    
     &.icon{
       @apply mr-[9px] rtl:ml-[9px] rtl:mr-[unset];
     }
