@@ -1,0 +1,77 @@
+{% comment %}
+Infinite slider section that displays images continuously
+{% endcomment %}
+
+{% if settings.infinite_slider %}
+<section class="infinite-slider-section">
+    <div class="container">
+        <h2>{{ 'featured_partners' | t }}</h2>
+        <div class="infinite-slider">
+            {% for image in (1..10) %}
+                <div class="slider-item">
+                    <img src="{{ 'partner_logo_' | append: image | append: '.jpg' | asset }}" 
+                         alt="{{ 'partner_' | append: image | t }}" 
+                         class="slider-image">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<style>
+.infinite-slider-section {
+    background: var(--bg-secondary);
+    padding: 4rem 0;
+    overflow: hidden;
+}
+
+.infinite-slider {
+    display: flex;
+    animation: slideAnimation 20s linear infinite;
+    width: max-content;
+}
+
+.slider-item {
+    min-width: 200px;
+    height: 120px;
+    margin: 0 1rem;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.slider-image {
+    width: 100px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+@keyframes slideAnimation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .slider-item {
+        min-width: 150px;
+        height: 80px;
+        margin: 0 0.5rem;
+    }
+    
+    .slider-image {
+        width: 60px;
+        height: 40px;
+    }
+}
+</style>
+{% endif %}

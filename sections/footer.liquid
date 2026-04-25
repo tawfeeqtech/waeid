@@ -1,0 +1,53 @@
+{% comment %}
+Footer section with coach-specific information
+{% endcomment %}
+
+<footer>
+    <div class="footer-content">
+        <!-- Coach Information -->
+        <div class="coach-info">
+            <h3>{{ store.name }}</h3>
+            <p>{{ 'contact_info' | t }}</p>
+            {% if store.contacts.phone %}
+                <p>📱 {{ store.contacts.phone }}</p>
+            {% endif %}
+            {% if store.contacts.email %}
+                <p>✉️ {{ store.contacts.email }}</p>
+            {% endif %}
+            {% if store.social %}
+                <div class="social-links">
+                    {% if store.social.facebook %}
+                        <a href="{{ store.social.facebook }}" target="_blank" aria-label="Facebook">📘</a>
+                    {% endif %}
+                    {% if store.social.instagram %}
+                        <a href="{{ store.social.instagram }}" target="_blank" aria-label="Instagram">📷</a>
+                    {% endif %}
+                    {% if store.social.twitter %}
+                        <a href="{{ store.social.twitter }}" target="_blank" aria-label="Twitter">🐦</a>
+                    {% endif %}
+                    {% if store.social.youtube %}
+                        <a href="{{ store.social.youtube }}" target="_blank" aria-label="YouTube">📺</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <h4>{{ 'quick_links' | t }}</h4>
+            <ul>
+                <li><a href="/">{{ 'home' | t }}</a></li>
+                <li><a href="/services">{{ 'services' | t }}</a></li>
+                <li><a href="/booking">{{ 'booking' | t }}</a></li>
+                <li><a href="/about">{{ 'about' | t }}</a></li>
+                <li><a href="/contact">{{ 'contact' | t }}</a></li>
+            </ul>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <p>&copy; {{ "now" | date: "%Y" }} {{ store.name }}. {{ 'all_rights_reserved' | t }}</p>
+            <p>{{ 'powered_by_salla' | t }}</p>
+        </div>
+    </div>
+</footer>

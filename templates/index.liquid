@@ -1,0 +1,142 @@
+{% comment %}
+Main homepage template for coaches
+{% endcomment %}
+
+{% section 'header' %}
+
+{% if settings.advanced_hero %}
+    {% section 'advanced-hero' %}
+{% else %}
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">{{ 'welcome_to_coaching' | t }}</h1>
+                <p class="hero-subtitle">{{ 'transform_your_life' | t }}</p>
+                {% if settings.coach_booking_form %}
+                    <a href="/booking" class="btn btn-large">{{ 'book_session' | t }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endif %}
+
+{% section 'infinite-slider' %}
+
+{% section 'before-after-slider' %}
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="coach-profile">
+                <img src="{{ 'coach_avatar.jpg' | asset }}" alt="{{ store.name }}" class="coach-avatar">
+                <h2 class="coach-name">{{ store.name }}</h2>
+                <p class="coach-title">{{ 'professional_coach' | t }}</p>
+            </div>
+            <div class="about-content">
+                <h3>{{ 'about_coaching' | t }}</h3>
+                <p>{{ 'coaching_description' | t }}</p>
+                <ul class="coaching-features">
+                    <li>{{ 'personalized_approach' | t }}</li>
+                    <li>{{ 'proven_methods' | t }}</li>
+                    <li>{{ 'ongoing_support' | t }}</li>
+                    <li>{{ 'measurable_results' | t }}</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2>{{ 'my_services' | t }}</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>{{ 'one_on_one_coaching' | t }}</h3>
+                    <p>{{ 'personalized_sessions' | t }}</p>
+                    <a href="/booking" class="btn">{{ 'book_now' | t }}</a>
+                </div>
+                <div class="service-card">
+                    <h3>{{ 'group_workshops' | t }}</h3>
+                    <p>{{ 'group_sessions' | t }}</p>
+                    <a href="/services" class="btn">{{ 'learn_more' | t }}</a>
+                </div>
+                <div class="service-card">
+                    <h3>{{ 'online_courses' | t }}</h3>
+                    <p>{{ 'digital_learning' | t }}</p>
+                    <a href="/courses" class="btn">{{ 'view_courses' | t }}</a>
+                </div>
+                <div class="service-card">
+                    <h3>{{ 'corporate_training' | t }}</h3>
+                    <p>{{ 'business_development' | t }}</p>
+                    <a href="/contact" class="btn">{{ 'contact_us' | t }}</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2>{{ 'client_success_stories' | t }}</h2>
+            <div class="testimonials-container" data-display="{{ settings.testimonials_display }}">
+                <div class="testimonial-item">
+                    <blockquote>"{{ 'testimonial_1_text' | t }}"</blockquote>
+                    <cite>- {{ 'testimonial_1_author' | t }}</cite>
+                </div>
+                <div class="testimonial-item">
+                    <blockquote>"{{ 'testimonial_2_text' | t }}"</blockquote>
+                    <cite>- {{ 'testimonial_2_author' | t }}</cite>
+                </div>
+                <div class="testimonial-item">
+                    <blockquote>"{{ 'testimonial_3_text' | t }}"</blockquote>
+                    <cite>- {{ 'testimonial_3_author' | t }}</cite>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section (if enabled) -->
+    {% if settings.coach_booking_form %}
+    <section class="booking-section">
+        <div class="container">
+            <h2>{{ 'book_your_session' | t }}</h2>
+            <form class="booking-form" action="/booking-submit" method="POST">
+                <div class="form-group">
+                    <label for="name" class="form-label">{{ 'full_name' | t }}</label>
+                    <input type="text" id="name" name="name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">{{ 'email_address' | t }}</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="form-label">{{ 'phone_number' | t }}</label>
+                    <input type="tel" id="phone" name="phone" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="date" class="form-label">{{ 'preferred_date' | t }}</label>
+                    <input type="date" id="date" name="date" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="service" class="form-label">{{ 'service_type' | t }}</label>
+                    <select id="service" name="service" class="form-input" required>
+                        <option value="">{{ 'select_service' | t }}</option>
+                        <option value="one-on-one">{{ 'one_on_one_coaching' | t }}</option>
+                        <option value="group">{{ 'group_workshops' | t }}</option>
+                        <option value="online">{{ 'online_courses' | t }}</option>
+                        <option value="corporate">{{ 'corporate_training' | t }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="form-label">{{ 'additional_notes' | t }}</label>
+                    <textarea id="message" name="message" class="form-input" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-large">{{ 'submit_booking' | t }}</button>
+            </form>
+        </div>
+    </section>
+    {% endif %}
+</main>
+
+{% section 'footer' %}

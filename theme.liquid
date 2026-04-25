@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="{{ store.language.code }}" dir="{{ store.language.dir }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title | default(store.name) }}</title>
+    
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{{ 'theme.css' | asset }}">
+    
+    <!-- Salla Core CSS -->
+    {{ 'salla.css' | asset_tag }}
+    
+    {% hook 'head:start' %}
+    {% hook 'head' %}
+    {% block head %}{% endblock %}
+    {% hook 'head:end' %}
+</head>
+<body class="{{ settings.header_style }}-header {% if settings.dark_mode %}dark-mode{% endif %}">
+    
+    <!-- Header -->
+    {% section 'header' %}
+    
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    {% section 'footer' %}
+    
+    <!-- Theme JavaScript -->
+    <script src="{{ 'theme.js' | asset }}"></script>
+    
+    <!-- Salla Core JavaScript -->
+    {{ 'salla.js' | asset_tag }}
+    
+    {% hook 'body:start' %}
+    {% hook 'body' %}
+    {% block scripts %}{% endblock %}
+    {% hook 'body:end' %}
+    
+    <!-- Dark Mode Toggle Script -->
+    {% if settings.dark_mode %}
+    <script>
+        // Dark mode functionality
+        const darkModeToggle = document.createElement('button');
+        darkModeToggle.innerHTML = '🌙';
+        darkModeToggle.className = 'dark-mode-toggle';
+        darkModeToggle.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 9999;
+            font-size: 20px;
+        `;
+        
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+        
+        // Check saved preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        
+        document.body.appendChild(darkModeToggle);
+    </script>
+    {% endif %}
+</body>
+</html>

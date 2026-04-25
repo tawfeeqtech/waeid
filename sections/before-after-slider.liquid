@@ -1,0 +1,219 @@
+{% comment %}
+Before/After comparison slider with drag functionality
+{% endcomment %}
+
+{% if settings.before_after_slider %}
+<section class="comparison-slider-section">
+    <div class="container">
+        <h2>{{ 'transformation_results' | t }}</h2>
+        <div class="comparison-container">
+            <!-- Before Image -->
+            <div class="comparison-item before">
+                <h3>{{ 'before' | t }}</h3>
+                <div class="image-container">
+                    <img src="{{ 'before_image.jpg' | asset }}" 
+                         alt="{{ 'before_training' | t }}" 
+                         class="comparison-image"
+                         id="beforeImage">
+                    <div class="upload-hint">
+                        <span>📤</span> {{ 'drag_before_image' | t }}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slider -->
+            <div class="slider-container">
+                <div class="slider-track">
+                    <input type="range" 
+                           id="comparisonSlider" 
+                           min="0" 
+                           max="100" 
+                           value="50" 
+                           class="comparison-slider">
+                    <div class="slider-labels">
+                        <span id="beforeLabel">{{ 'before' | t }}</span>
+                        <span id="afterLabel">{{ 'after' | t }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- After Image -->
+            <div class="comparison-item after">
+                <h3>{{ 'after' | t }}</h3>
+                <div class="image-container">
+                    <img src="{{ 'after_image.jpg' | asset }}" 
+                         alt="{{ 'after_training' | t }}" 
+                         class="comparison-image"
+                         id="afterImage">
+                    <div class="upload-hint">
+                        <span>📤</span> {{ 'drag_after_image' | t }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.comparison-slider-section {
+    background: var(--bg-secondary);
+    padding: 4rem 0;
+}
+
+.comparison-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.comparison-item {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.comparison-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.image-container {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.comparison-image {
+    width: 100%;
+    max-width: 300px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+}
+
+.upload-hint {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-container:hover .upload-hint {
+    opacity: 1;
+}
+
+.slider-container {
+    grid-column: 2;
+    padding: 0 2rem;
+}
+
+.slider-track {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+}
+
+.comparison-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .comparison-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .comparison-item {
+        padding: 1rem;
+    }
+    
+    .slider-container {
+        padding: 0 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('comparisonSlider');
+    const beforeImage = document.getElementById('beforeImage');
+    const afterImage = document.getElementById('afterImage');
+    const beforeLabel = document.getElementById('beforeLabel');
+    const afterLabel = document.getElementById('afterLabel');
+    
+    // Image upload functionality
+    function setupImageUpload(imageElement, hintElement) {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+        
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageElement.src = e.target.result;
+                    hintElement.style.opacity = '0';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Trigger file input on image click
+        imageElement.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        imageElement.parentNode.appendChild(fileInput);
+    }
+    
+    setupImageUpload(beforeImage, beforeImage.parentElement.querySelector('.upload-hint'));
+    setupImageUpload(afterImage, afterImage.parentElement.querySelector('.upload-hint'));
+    
+    // Slider functionality
+    slider.addEventListener('input', function() {
+        const value = this.value;
+        
+        // Update after image opacity based on slider position
+        if (value < 50) {
+            afterImage.style.opacity = (value / 50);
+            beforeImage.style.opacity = 1;
+        } else {
+            beforeImage.style.opacity = (100 - value) / 50;
+            afterImage.style.opacity = 1;
+        }
+        
+        // Update labels
+        beforeLabel.textContent = value < 50 ? '{{ 'before' | t }}' : '{{ 'after' | t }}';
+        afterLabel.textContent = value >= 50 ? '{{ 'after' | t }}' : '{{ 'before' | t }}';
+    });
+});
+</script>
+{% endif %}

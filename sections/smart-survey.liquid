@@ -1,0 +1,305 @@
+{% comment %}
+Smart survey system with multi-step questions
+{% endcomment %}
+
+{% if settings.show_survey and settings.survey_questions %}
+<section class="survey-section">
+    <div class="container">
+        <h2>{{ 'coaching_assessment' | t }}</h2>
+        <p class="survey-subtitle">{{ 'answer_few_questions' | t }}</p>
+        
+        <div class="survey-container">
+            <form class="survey-form" id="smartSurvey" action="/survey-submit" method="POST">
+                {% assign questions = settings.survey_questions | split: '\n' %}
+                {% for question in questions %}
+                    {% assign question_number = forloop.index0 | plus: 1 %}
+                    <div class="survey-question" data-question="{{ question_number }}">
+                        <label class="survey-label">
+                            <span class="question-number">{{ question_number }}.</span>
+                            {{ question }}
+                        </label>
+                        
+                        {% if question contains '?' %}
+                            <div class="survey-options">
+                                {% assign options = question | split: '?' %}
+                                {% for option in options %}
+                                    <label class="survey-option">
+                                        <input type="radio" 
+                                               name="question_{{ question_number }}" 
+                                               value="{{ option | strip }}" 
+                                               {% if forloop.first %}checked{% endif %}>
+                                        <span class="option-text">{{ option | strip }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <textarea class="survey-textarea" 
+                                      name="question_{{ question_number }}" 
+                                      rows="4" 
+                                      placeholder="{{ 'type_answer_here' | t }}"
+                                      required></textarea>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <div class="survey-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="surveyProgress"></div>
+                    </div>
+                    <span class="progress-text"><span id="currentStep">1</span> / <span id="totalSteps">{{ questions.size }}</span></span>
+                </div>
+                
+                <div class="survey-actions">
+                    <button type="button" 
+                            class="btn btn-secondary" 
+                            id="prevBtn" 
+                            onclick="previousQuestion()" 
+                            disabled>
+                        ← {{ 'previous' | t }}
+                    </button>
+                    <button type="submit" 
+                            class="btn btn-primary" 
+                            id="nextBtn" 
+                            onclick="nextQuestion()">
+                        {{ 'next' | t }} →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+.survey-section {
+    background: var(--bg-secondary);
+    padding: 4rem 0;
+}
+
+.survey-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.survey-subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.survey-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.survey-question {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.survey-label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.question-number {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    margin-left: 1rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.survey-options {
+    margin-top: 1rem;
+}
+
+.survey-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.survey-option:hover {
+    background: var(--bg-secondary);
+}
+
+.survey-option input[type="radio"] {
+    margin-right: 0.75rem;
+}
+
+.option-text {
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.survey-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.survey-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.survey-progress {
+    margin-top: 2rem;
+}
+
+.progress-bar {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    border-radius: 8px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 8px;
+}
+
+.survey-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .survey-container {
+        padding: 1rem;
+    }
+    
+    .survey-question {
+        padding: 1rem;
+    }
+    
+    .survey-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+</style>
+
+<script>
+let currentQuestion = 1;
+let totalQuestions = {{ settings.survey_questions | split: '\n' | size }};
+
+function updateProgress() {
+    const progress = ((currentQuestion - 1) / totalQuestions) * 100;
+    document.getElementById('surveyProgress').style.width = progress + '%';
+    document.getElementById('currentStep').textContent = currentQuestion;
+    document.getElementById('totalSteps').textContent = totalQuestions;
+    
+    // Update buttons
+    document.getElementById('prevBtn').disabled = currentQuestion === 1;
+    document.getElementById('nextBtn').textContent = currentQuestion === totalQuestions ? '{{ 'submit' | t }}' : '{{ 'next' | t }}';
+}
+
+function nextQuestion() {
+    const questions = document.querySelectorAll('.survey-question');
+    const currentQuestionElement = questions[currentQuestion - 1];
+    
+    // Save current answer
+    const radioInput = currentQuestionElement.querySelector('input[type="radio"]:checked');
+    const textInput = currentQuestionElement.querySelector('textarea');
+    
+    if (radioInput) {
+        localStorage.setItem(`survey_question_${currentQuestion}`, radioInput.value);
+    } else if (textInput) {
+        localStorage.setItem(`survey_question_${currentQuestion}`, textInput.value);
+    }
+    
+    // Hide current question
+    currentQuestionElement.style.display = 'none';
+    
+    // Show next question
+    if (currentQuestion < questions.length) {
+        questions[currentQuestion].style.display = 'block';
+        currentQuestion++;
+    } else {
+        // Submit form
+        document.getElementById('smartSurvey').submit();
+    }
+    
+    updateProgress();
+}
+
+function previousQuestion() {
+    if (currentQuestion > 1) {
+        currentQuestion--;
+        
+        const questions = document.querySelectorAll('.survey-question');
+        questions.forEach(q => q.style.display = 'none');
+        questions[currentQuestion - 1].style.display = 'block';
+        
+        updateProgress();
+    }
+}
+
+// Load saved answers on page load
+document.addEventListener('DOMContentLoaded', function() {
+    for (let i = 1; i <= totalQuestions; i++) {
+        const savedAnswer = localStorage.getItem(`survey_question_${i}`);
+        if (savedAnswer) {
+            const questionElement = document.querySelector(`[data-question="${i}"]`);
+            const radioInput = questionElement.querySelector(`input[value="${savedAnswer}"]`);
+            const textInput = questionElement.querySelector('textarea');
+            
+            if (radioInput) {
+                radioInput.checked = true;
+            } else if (textInput) {
+                textInput.value = savedAnswer;
+            }
+        }
+    }
+    
+    updateProgress();
+});
+</script>
+{% endif %}
