@@ -1,27 +1,293 @@
-Hello Funnel - File is working!
-
-This is a test to confirm the funnel-landing.twig file is properly linked and loading.
-
+{#
+| Variable         | Type       | Description                                                         |
+|------------------|------------|---------------------------------------------------------------------|
+| page             | object     |                                                                     |
+| page.title       | string     | *could be html                                                      |
+| page.slug        | string     | ex: "cat.show"                                                      |
+#}
 {% extends "layouts.master" %}
 {% block content %}
-<div style="padding: 5rem 0; text-align: center; background: var(--bg-primary);">
-    <h1 style="font-size: 3rem; font-weight: 700; color: var(--color-text); font-family: var(--font-main); margin-bottom: 2rem;">
-        🎯 Single-Product Digital Funnel is Working!
-    </h1>
-    <p style="font-size: 1.2rem; color: var(--color-text-secondary); max-width: 600px; margin: 0 auto;">
-        All funnel components are now properly linked and should be visible in the preview.
-    </p>
-    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; max-width: 400px; margin: 2rem auto;">
-        <h3 style="color: var(--color-text); margin-bottom: 1rem;">✅ File Status:</h3>
-        <ul style="text-align: left; color: var(--color-text-secondary);">
-            <li>📁 funnel-landing.twig exists and is properly formatted</li>
-            <li>🎨 funnel.scss is included in app.scss</li>
-            <li>📱 JS files are linked in master.twig</li>
-            <li>🔄 Production build completed</li>
-        </ul>
+<!-- Single-Product Digital Funnel Landing Page -->
+
+<!-- Hero Section - Value Proposition -->
+<section class="funnel-hero" data-section="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 data-headline>{{ page.title | default('حوّل حياتك اليوم') }}</h1>
+            <p class="subtitle">
+                {{ page.description | default('برنامج تدريب متكامل يساعدك على تحقيق أهدافك وتطوير مهاراتك في أقل وقت ممكن') }}
+            </p>
+            
+            <div class="hero-cta">
+                <button class="btn btn--primary" data-cta data-package="pro">
+                    {{ user.language.code == 'ar' ? 'ابدأ الآن' : 'Start Now' }}
+                </button>
+                <button class="btn btn--secondary" data-new-user>
+                    {{ user.language.code == 'ar' ? 'اكتشف كيف يعمل' : 'Discover How It Works' }}
+                </button>
+            </div>
+            
+            <div class="trust-indicators">
+                <div class="trust-item">
+                    <span class="icon">✓</span>
+                    <span>{{ user.language.code == 'ar' ? 'ضمان استرداد المبلغ' : 'Money Back Guarantee' }}</span>
+                </div>
+                <div class="trust-item">
+                    <span class="icon">✓</span>
+                    <span>{{ user.language.code == 'ar' ? 'دعم فوري 24/7' : '24/7 Support' }}</span>
+                </div>
+                <div class="trust-item">
+                    <span class="icon">✓</span>
+                    <span>{{ user.language.code == 'ar' ? 'أكثر من 1000 طالب' : '1000+ Students' }}</span>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-{% endblock %}
+</section>
+
+<!-- Problem & Solution Section -->
+<section class="funnel-problem" data-section="problem" style="padding: 5rem 0; background: var(--bg-secondary);">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;">
+            <div>
+                <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text); font-family: var(--font-main);">
+                    {{ user.language.code == 'ar' ? 'هل تواجه هذه التحديات؟' : 'Are You Facing These Challenges?' }}
+                </h2>
+                <ul style="list-style: none; padding: 0; margin-bottom: 2rem;">
+                    <li style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; color: var(--color-text-secondary);">
+                        <span style="color: var(--color-primary);">→</span>
+                        {{ user.language.code == 'ar' ? 'صعوبة في تحديد الأهداف الواضحة' : 'Difficulty setting clear goals' }}
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; color: var(--color-text-secondary);">
+                        <span style="color: var(--color-primary);">→</span>
+                        {{ user.language.code == 'ar' ? 'قلة الموارد والتوجيه الصحيح' : 'Lack of resources and proper guidance' }}
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; color: var(--color-text-secondary);">
+                        <span style="color: var(--color-primary);">→</span>
+                        {{ user.language.code == 'ar' ? 'التأخر في تحقيق النتائج المرجوة' : 'Delay in achieving desired results' }}
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-text); font-family: var(--font-main);">
+                    {{ user.language.code == 'ar' ? 'الحل موجود هنا' : 'The Solution is Here' }}
+                </h2>
+                <p style="color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 2rem;">
+                    {{ user.language.code == 'ar' ? 'برنامجنا المتكامل يوفر لك الأدوات والتقنيات والخبرة اللازمة للتغلب على كل هذه التحديات وتحقيق نجاح باهر' : 'Our comprehensive program provides you with the tools, techniques, and expertise needed to overcome all these challenges and achieve outstanding success' }}
+                </p>
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+                    <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--color-text);">
+                        {{ user.language.code == 'ar' ? 'ماذا ستحصل؟' : 'What You Will Get:' }}
+                    </h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; color: var(--color-text);">
+                            <span style="color: var(--color-primary);">✓</span>
+                            {{ user.language.code == 'ar' ? 'خطة عمل مخصصة' : 'Customized action plan' }}
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; color: var(--color-text);">
+                            <span style="color: var(--color-primary);">✓</span>
+                            {{ user.language.code == 'ar' ? 'جلسات تدريب فردية' : 'One-on-one coaching sessions' }}
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; color: var(--color-text);">
+                            <span style="color: var(--color-primary);">✓</span>
+                            {{ user.language.code == 'ar' ? 'مجتمع داعم' : 'Supportive community' }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="funnel-pricing" data-pricing-section data-section="pricing">
+    <div class="container">
+        <div class="section-header">
+            <h2>{{ user.language.code == 'ar' ? 'اختر الباقة المناسبة لك' : 'Choose Your Perfect Package' }}</h2>
+            <p class="subtitle">
+                {{ user.language.code == 'ar' ? 'أسعار مرنة تناسب جميع الميزانيات مع ضمان الجودة' : 'Flexible prices to suit all budgets with quality guarantee' }}
+            </p>
+        </div>
+        
+        <div class="pricing-grid">
+            <!-- Basic Package -->
+            <div class="pricing-card" data-package="basic">
+                <h3 class="plan-name">{{ user.language.code == 'ar' ? 'الأساسية' : 'Basic' }}</h3>
+                <p class="plan-description">{{ user.language.code == 'ar' ? 'للبداية والتعلم الأساسي' : 'For beginners and basic learning' }}</p>
+                
+                <div class="plan-price">
+                    <span class="currency">SAR</span>
+                    <span class="amount">299</span>
+                    <span class="period">{{ user.language.code == 'ar' ? '/ شهر' : '/ month' }}</span>
+                </div>
+                
+                <ul class="features">
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'وصول لجميع المواد الأساسية' : 'Access to all basic materials' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'مجتمع الدعم' : 'Support community' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'تحديثات شهرية' : 'Monthly updates' }}
+                    </li>
+                    <li class="not-included">
+                        <span class="check-icon">✗</span>
+                        {{ user.language.code == 'ar' ? 'جلسات فردية' : 'One-on-one sessions' }}
+                    </li>
+                </ul>
+                
+                <button class="plan-cta" data-cta data-package="basic">
+                    {{ user.language.code == 'ar' ? 'اختر الباقة الأساسية' : 'Choose Basic' }}
+                </button>
+            </div>
+            
+            <!-- Pro Package (Featured) -->
+            <div class="pricing-card featured" data-package="pro">
+                <span class="badge">{{ user.language.code == 'ar' ? 'الأكثر شعبية' : 'Most Popular' }}</span>
+                <h3 class="plan-name">{{ user.language.code == 'ar' ? 'المحترفة' : 'Pro' }}</h3>
+                <p class="plan-description">{{ user.language.code == 'ar' ? 'للمحترفين وطمحي النمو' : 'For professionals and growth seekers' }}</p>
+                
+                <div class="plan-price">
+                    <span class="currency">SAR</span>
+                    <span class="amount">599</span>
+                    <span class="period">{{ user.language.code == 'ar' ? '/ شهر' : '/ month' }}</span>
+                    <div class="original-price">SAR 799</div>
+                </div>
+                
+                <ul class="features">
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'كل ما في الباقة الأساسية' : 'Everything in Basic' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'جلسة فردية شهرياً' : '1 one-on-one session per month' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'مواد متقدمة' : 'Advanced materials' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'دعم أولوية' : 'Priority support' }}
+                    </li>
+                </ul>
+                
+                <button class="plan-cta" data-cta data-package="pro">
+                    {{ user.language.code == 'ar' ? 'اختر الباقة المحترفة' : 'Choose Pro' }}
+                </button>
+            </div>
+            
+            <!-- Premium Package -->
+            <div class="pricing-card" data-package="premium">
+                <h3 class="plan-name">{{ user.language.code == 'ar' ? 'البريميوم' : 'Premium' }}</h3>
+                <p class="plan-description">{{ user.language.code == 'ar' ? 'للخبراء والباحثين عن التميز' : 'For experts and excellence seekers' }}</p>
+                
+                <div class="plan-price">
+                    <span class="currency">SAR</span>
+                    <span class="amount">999</span>
+                    <span class="period">{{ user.language.code == 'ar' ? '/ شهر' : '/ month' }}</span>
+                    <div class="original-price">SAR 1499</div>
+                </div>
+                
+                <ul class="features">
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'كل ما في الباقة المحترفة' : 'Everything in Pro' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'جلسات فردية غير محدودة' : 'Unlimited one-on-one sessions' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'خطة شخصية مخصصة' : 'Personalized custom plan' }}
+                    </li>
+                    <li>
+                        <span class="check-icon">✓</span>
+                        {{ user.language.code == 'ar' ? 'دعم مباشر 24/7' : 'Direct 24/7 support' }}
+                    </li>
+                </ul>
+                
+                <button class="plan-cta" data-cta data-package="premium">
+                    {{ user.language.code == 'ar' ? 'اختر الباقة البريميوم' : 'Choose Premium' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pre-Qualification Form -->
+<section class="funnel-form" data-section="form">
+    <div class="container">
+        <div class="form-header">
+            <h2>{{ user.language.code == 'ar' ? 'دعنا نعرفك أفضل' : 'Let Us Know You Better' }}</h2>
+            <p class="subtitle">
+                {{ user.language.code == 'ar' ? 'أجب على بضع أسئلة لمساعدتنا في تخصيص تجربتك' : 'Answer a few questions to help us customize your experience' }}
+            </p>
+        </div>
+        
+        <form class="multi-step-form" data-funnel-form="pre-qualification">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 25%;"></div>
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+                <div class="step">4</div>
+            </div>
+            
+            <!-- Step 1: Goals -->
+            <div class="form-step active">
+                <h3 class="step-title">{{ user.language.code == 'ar' ? 'ما هو هدفك الرئيسي؟' : 'What is your main goal?' }}</h3>
+                <p class="step-description">{{ user.language.code == 'ar' ? 'اختر الهدف الأقرب لطموحك' : 'Choose the goal closest to your ambition' }}</p>
+                
+                <div class="form-group">
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="goal" value="career" required>
+                            {{ user.language.code == 'ar' ? 'تطوير المسار المهني' : 'Career development' }}
+                        </label>
+                        <label>
+                            <input type="radio" name="goal" value="business">
+                            {{ user.language.code == 'ar' ? 'نمو الأعمال' : 'Business growth' }}
+                        </label>
+                        <label>
+                            <input type="radio" name="goal" value="personal">
+                            {{ user.language.code == 'ar' ? 'تطوير شخصي' : 'Personal development' }}
+                        </label>
+                        <label>
+                            <input type="radio" name="goal" value="skills">
+                            {{ user.language.code == 'ar' ? 'اكتساب مهارات جديدة' : 'Acquiring new skills' }}
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn--primary next-step">
+                        {{ user.language.code == 'ar' ? 'التالي' : 'Next' }}
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Current Level -->
+            <div class="form-step">
+                <h3 class="step-title">{{ user.language.code == 'ar' ? 'ما هو مستواك الحالي؟' : 'What is your current level?' }}</h3>
+                <p class="step-description">{{ user.language.code == 'ar' ? 'ساعدنا في تحديد نقطة البداية المناسبة' : 'Help us determine the right starting point' }}</p>
+                
+                <div class="form-group">
+                    <div class="radio-group">
+                        <label>
+                            <input type="radio" name="level" value="beginner" required>
+                            {{ user.language.code == 'ar' ? 'مبتدئ - أبدأ من الصفر' : 'Beginner - Starting from scratch' }}
+                        </label>
+                        <label>
+                            <input type="radio" name="level" value="intermediate">
+                            {{ user.language.code == 'ar' ? 'متوسط - لدي بعض الخبرة' : 'Intermediate - Have some experience' }}
+                        </label>
                         <label>
                             <input type="radio" name="level" value="advanced">
                             {{ user.language.code == 'ar' ? 'متقدم - أبحث عن التميز' : 'Advanced - Seeking excellence' }}
