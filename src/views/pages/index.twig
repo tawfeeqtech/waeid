@@ -7,11 +7,10 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
-    <!-- Original homepage content -->
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-center mb-8">{{ page.title | default('Welcome to Our Store') }}</h1>
-        <p class="text-center text-gray-600">{{ page.description | default('Browse our amazing products') }}</p>
-    </div>
+    <!-- Dynamic homepage components -->
+    {% for component in theme.components %}
+        {% component component.slug %}
+    {% endfor %}
 {% endblock %}
 {% block scripts %}
     <script defer src="{{ 'home.js' | asset }}"></script>
