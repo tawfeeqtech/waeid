@@ -35,8 +35,9 @@
          px-3.5 py-1
          text-xs font-semibold tracking-wide uppercase
          rounded-full
-         bg-primary/10 text-primary
-         border border-primary/20;
+         text-primary;
+  background-color: color-mix(in srgb, var(--token-color-primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--token-color-primary) 25%, transparent);
 
   .hero-section--centered &,
   .hero-section--video & {

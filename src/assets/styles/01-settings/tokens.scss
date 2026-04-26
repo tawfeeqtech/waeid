@@ -1,0 +1,203 @@
+/* ================================================================
+   DESIGN TOKENS — Waeid Coaching Theme
+   ================================================================
+   Single source of truth for all visual decisions.
+
+   HOW TO USE:
+   - Reference tokens in SCSS:   color: var(--token-color-text);
+   - Reference in Twig/HTML:     style="background: var(--token-color-primary);"
+   - Salla's primary color is injected by master.twig and overrides
+     the default below.
+
+   PRESET THEMES (set via [data-theme="preset-name"] on <body>):
+     default  → Coach: navy + teal
+     energy   → High-intensity: black + red/orange
+     premium  → Luxury coaching: dark + gold
+     minimal  → Corporate: white + charcoal
+     nature   → Wellness/yoga: white + deep green
+   ================================================================ */
+
+/* ── Core Palette (driven by Salla's primary color picker) ───── */
+:root {
+  /* Primary — overridden by master.twig from Salla color settings */
+  --token-color-primary:        var(--color-primary, #414042);
+  --token-color-primary-dark:   var(--color-primary-dark, #272628);
+  --token-color-primary-light:  var(--color-primary-light, #676668);
+  --token-color-primary-text:   var(--color-primary-reverse, #ffffff);
+
+  /* ── Surface & Background ─────────────────────────────────── */
+  --token-bg-page:      #ffffff;
+  --token-bg-surface:   #ffffff;
+  --token-bg-surface-2: #f8f9fb;
+  --token-bg-surface-3: #f1f3f7;
+  --token-bg-inverse:   #0f172a;
+
+  /* ── Text ─────────────────────────────────────────────────── */
+  --token-text-primary:   #1a1c23;
+  --token-text-secondary: #4b5563;
+  --token-text-muted:     #9ca3af;
+  --token-text-inverse:   #ffffff;
+  --token-text-accent:    var(--token-color-primary);
+
+  /* ── Borders ──────────────────────────────────────────────── */
+  --token-border-color:       #e5e7eb;
+  --token-border-color-focus: var(--token-color-primary);
+
+  /* ── Typography ───────────────────────────────────────────── */
+  --token-font-family:        var(--font-main, 'Dubai', 'DINNextLTArabic', sans-serif);
+  --token-font-size-xs:       0.75rem;    /* 12px */
+  --token-font-size-sm:       0.875rem;   /* 14px */
+  --token-font-size-base:     1rem;       /* 16px */
+  --token-font-size-lg:       1.125rem;   /* 18px */
+  --token-font-size-xl:       1.25rem;    /* 20px */
+  --token-font-size-2xl:      1.5rem;     /* 24px */
+  --token-font-size-3xl:      1.875rem;   /* 30px */
+  --token-font-size-4xl:      2.25rem;    /* 36px */
+  --token-font-size-hero:     clamp(2.25rem, 5vw, 3.75rem); /* 36→60px fluid */
+
+  --token-font-weight-regular: 400;
+  --token-font-weight-medium:  500;
+  --token-font-weight-semi:    600;
+  --token-font-weight-bold:    700;
+  --token-font-weight-black:   900;
+
+  --token-line-height-tight:   1.2;
+  --token-line-height-normal:  1.5;
+  --token-line-height-relaxed: 1.75;
+
+  /* ── Spacing Scale ────────────────────────────────────────── */
+  --token-space-1:   0.25rem;  /*  4px */
+  --token-space-2:   0.5rem;   /*  8px */
+  --token-space-3:   0.75rem;  /* 12px */
+  --token-space-4:   1rem;     /* 16px */
+  --token-space-6:   1.5rem;   /* 24px */
+  --token-space-8:   2rem;     /* 32px */
+  --token-space-12:  3rem;     /* 48px */
+  --token-space-16:  4rem;     /* 64px */
+  --token-space-20:  5rem;     /* 80px */
+  --token-space-section:    clamp(3rem, 6vw, 5rem);  /* fluid section padding */
+  --token-space-card:       var(--token-space-6);
+
+  /* ── Border Radius ────────────────────────────────────────── */
+  --token-radius-xs:   4px;
+  --token-radius-sm:   8px;
+  --token-radius-md:   12px;
+  --token-radius-lg:   20px;
+  --token-radius-xl:   28px;
+  --token-radius-pill: 9999px;
+  /* Semantic aliases */
+  --token-radius-btn:     var(--token-radius-pill);
+  --token-radius-card:    var(--token-radius-lg);
+  --token-radius-input:   var(--token-radius-sm);
+  --token-radius-badge:   var(--token-radius-pill);
+
+  /* ── Shadows ──────────────────────────────────────────────── */
+  --token-shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.06);
+  --token-shadow-sm:   0 2px 8px  rgba(0, 0, 0, 0.08);
+  --token-shadow-md:   0 4px 16px rgba(0, 0, 0, 0.10);
+  --token-shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.12);
+  --token-shadow-xl:   0 16px 48px rgba(0, 0, 0, 0.16);
+  /* Semantic aliases */
+  --token-shadow-card:   var(--token-shadow-md);
+  --token-shadow-modal:  var(--token-shadow-xl);
+  --token-shadow-btn:    var(--token-shadow-sm);
+  --token-shadow-header: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+  /* ── Motion ───────────────────────────────────────────────── */
+  --token-duration-fast:   150ms;
+  --token-duration-base:   250ms;
+  --token-duration-slow:   400ms;
+  --token-easing-default:  cubic-bezier(0.4, 0, 0.2, 1);
+  --token-easing-bounce:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --token-easing-smooth:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  /* Shorthand */
+  --token-transition:      var(--token-duration-base) var(--token-easing-default);
+  --token-transition-fast: var(--token-duration-fast) var(--token-easing-default);
+
+  /* ── Z-Index Scale ────────────────────────────────────────── */
+  --token-z-below:   -1;
+  --token-z-base:     0;
+  --token-z-raised:  10;
+  --token-z-sticky:  20;
+  --token-z-overlay: 30;
+  --token-z-modal:   40;
+  --token-z-toast:   50;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DARK MODE — universal override
+   ════════════════════════════════════════════════════════════════ */
+.dark,
+[data-theme="dark"] {
+  --token-bg-page:      #0f172a;
+  --token-bg-surface:   #0f172a;
+  --token-bg-surface-2: #1e293b;
+  --token-bg-surface-3: #334155;
+  --token-bg-inverse:   #f8fafc;
+
+  --token-text-primary:   #f1f5f9;
+  --token-text-secondary: #94a3b8;
+  --token-text-muted:     #64748b;
+  --token-text-inverse:   #0f172a;
+
+  --token-border-color: #334155;
+
+  --token-shadow-sm: 0 2px 8px  rgba(0, 0, 0, 0.30);
+  --token-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --token-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.40);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PRESET THEMES
+   Applied via [data-theme="preset"] on <body> from master.twig
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Preset: energy (red/orange — high-intensity training) ───── */
+[data-theme="energy"] {
+  --token-color-primary:       #e84118;
+  --token-color-primary-dark:  #b71c1c;
+  --token-color-primary-light: #ff7043;
+  --token-color-primary-text:  #ffffff;
+  --token-bg-surface-2:        #fff8f6;
+  --token-text-accent:         #e84118;
+}
+
+/* ── Preset: premium (dark + gold — luxury coaching) ─────────── */
+[data-theme="premium"] {
+  --token-color-primary:       #c9a84c;
+  --token-color-primary-dark:  #a07730;
+  --token-color-primary-light: #e8c97a;
+  --token-color-primary-text:  #1a1208;
+  --token-bg-page:             #0d0d0d;
+  --token-bg-surface:          #141414;
+  --token-bg-surface-2:        #1e1e1e;
+  --token-bg-surface-3:        #2a2a2a;
+  --token-text-primary:        #f5f0e8;
+  --token-text-secondary:      #c4b99a;
+  --token-text-muted:          #7a7060;
+  --token-border-color:        #2e2e2e;
+  --token-shadow-sm:           0 2px 8px  rgba(0,0,0,0.5);
+  --token-shadow-md:           0 4px 16px rgba(0,0,0,0.6);
+}
+
+/* ── Preset: minimal (charcoal + white — clean corporate) ─────── */
+[data-theme="minimal"] {
+  --token-color-primary:       #1a1a2e;
+  --token-color-primary-dark:  #0d0d1a;
+  --token-color-primary-light: #3a3a5c;
+  --token-color-primary-text:  #ffffff;
+  --token-bg-surface-2:        #f4f4f4;
+  --token-radius-btn:          var(--token-radius-sm);
+  --token-radius-card:         var(--token-radius-sm);
+}
+
+/* ── Preset: nature (green + earth — wellness / yoga) ─────────── */
+[data-theme="nature"] {
+  --token-color-primary:       #2d6a4f;
+  --token-color-primary-dark:  #1b4332;
+  --token-color-primary-light: #52b788;
+  --token-color-primary-text:  #ffffff;
+  --token-bg-surface-2:        #f0faf4;
+  --token-text-accent:         #2d6a4f;
+  --token-radius-card:         var(--token-radius-xl);
+}

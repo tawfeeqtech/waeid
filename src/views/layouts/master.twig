@@ -84,21 +84,33 @@
     
     <style>
         :root {
-            --font-main: '{{theme.font.name}}';
-            --color-primary: {{ theme.color.primary }};
-            --color-primary-dark: {{ theme.color.darker(0.15) }};
-            --color-primary-light: {{ theme.color.lighter(0.15) }};
-            --color-primary-reverse: {{ theme.color.reverse_text }};
+            /* ── Salla color picker → CSS token bridge ── */
+            --font-main:             '{{ theme.font.name }}';
+            --color-primary:          {{ theme.color.primary }};
+            --color-primary-dark:     {{ theme.color.darker(0.15) }};
+            --color-primary-light:    {{ theme.color.lighter(0.15) }};
+            --color-primary-reverse:  {{ theme.color.reverse_text }};
+            /* Forward into the token layer so all components stay consistent */
+            --token-color-primary:        {{ theme.color.primary }};
+            --token-color-primary-dark:   {{ theme.color.darker(0.15) }};
+            --token-color-primary-light:  {{ theme.color.lighter(0.15) }};
+            --token-color-primary-text:   {{ theme.color.reverse_text }};
+            --token-font-family:         '{{ theme.font.name }}';
         }
     </style>
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
 </head>
-<body id="app" class="theme-raed overflow-x-hidden {% hook 'body:classes' %}
-  {{ theme.settings.get('footer_is_dark') ? ' footer-is-dark' : ' footer-is-light' }}
-  {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
-  {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
-  ">
+{% set _theme_preset = theme.settings.get('theme_preset') | default('default') %}
+{% set _is_dark      = theme.settings.get('footer_is_dark') %}
+<body
+  id="app"
+  class="theme-raed overflow-x-hidden {% hook 'body:classes' %}
+    {{ _is_dark ? ' dark footer-is-dark' : ' footer-is-light' }}
+    {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
+    {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}"
+  data-theme="{{ _preset_map[_theme_preset] | default(_theme_preset) }}"
+>
 <noscript>
     To get full functionality of this site you need to enable JavaScript. Here is how
     <a href="https://www.enable-javascript.com/" rel="noreferrer"

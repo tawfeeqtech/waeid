@@ -1,0 +1,29 @@
+# Build output — large compiled files Claude doesn't need to read
+public/
+assets/css/
+assets/js/
+
+# Dependencies
+node_modules/
+
+# Package manager lock files (large, rarely useful to read)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Editor / OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Git internals
+.git/
+
+# Logs and temp files
+*.log
+npm-debug.log*
+.npm/
+.pnpm-debug.log*

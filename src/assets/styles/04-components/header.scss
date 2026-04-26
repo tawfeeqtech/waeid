@@ -297,9 +297,10 @@ salla-user-menu{
          transition-all duration-300
          hover:shadow-lg hover:opacity-90 hover:-translate-y-px;
 
-  // Dark mode
+  // Dark mode — CSS variable avoids Tailwind opacity-modifier limitation
   .dark & {
-    @apply bg-primary/90;
+    background-color: var(--token-color-primary);
+    opacity: 0.92;
   }
 }
 

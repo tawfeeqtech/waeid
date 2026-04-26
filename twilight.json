@@ -264,6 +264,36 @@
         },
         {
             "type": "static",
+            "id": "static-line-tokens",
+            "format": "line"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "static-label-tokens",
+            "value": "<div class='rounded-lg' style='background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);display:flex;justify-content:center;align-items:center;padding:15px;margin-bottom:20px !important;flex-direction:column;gap:8px'><h6 style='color:#fff;font-size:15px;font-weight:bold;margin:0'>🎨 نظام الهوية البصرية</h6><p style='color:#a0b4cc;font-size:12px;margin:0'>غيّر شكل الموقع كاملاً بضغطة واحدة</p></div>",
+            "variant": "h6"
+        },
+        {
+            "id": "theme_preset",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "نمط الهوية البصرية (Theme Preset)",
+            "description": "كل نمط يغير الألوان والظلال والزوايا دفعة واحدة عبر CSS Variables",
+            "icon": "sicon-colorize",
+            "selected": [{"label": "افتراضي (Coach Navy)", "value": "default", "key": "preset-default"}],
+            "options": [
+                {"label": "افتراضي — كوتش احترافي (أزرق داكن)",    "value": "default", "key": "preset-default"},
+                {"label": "طاقة — تدريب مكثف (أحمر / برتقالي)",    "value": "energy",  "key": "preset-energy"},
+                {"label": "بريميوم — لوكشري (أسود + ذهبي)",         "value": "premium", "key": "preset-premium"},
+                {"label": "مينيمال — شركات (أبيض + رمادي)",         "value": "minimal", "key": "preset-minimal"},
+                {"label": "طبيعة — رياضة وعافية (أخضر داكن)",       "value": "nature",  "key": "preset-nature"}
+            ],
+            "source": "Manual",
+            "required": false
+        },
+        {
+            "type": "static",
             "id": "static-line3",
             "format": "line"
         },

@@ -1,117 +1,80 @@
 {#
- | Smart Header Matrix v1.0
+ | Smart Header Matrix v1.1
  | ========================
+ | FIX: Replaced {% import _self %} macro with {% include %} pattern.
+ |   — Macros in Twig have isolated scope; store/user/is_page() were
+ |     unreachable. {% include %} inherits the full Salla template scope.
+ |
+ | FIX: Safe extraction of items/dropdown-list setting values.
+ |   — Salla may return a string "logo" OR [{value:"logo",...}].
+ |     The _slot_val() logic handles both formats defensively.
+ |
  | Slot Architecture: start · center · end  (RTL-aware via flexbox dir)
+ |   Each slot → components/header/_slot.twig
  |
- | Each slot accepts one of:
- |   logo | menu | search | cta_button | social | actions | empty
- |
- | Slot defaults (classic layout):
- |   start  → logo
- |   center → menu
- |   end    → actions
- |
- | Variables passed in:
- |   cart.items_count  int
- |   cart.total        string  "١٠٠ ر.س"
+ | Variables: cart.items_count (int), cart.total (string)
  #}
-{% import _self as slots %}
 
-{# ── Read Slot Assignments ───────────────────────────────── #}
-{% set slot_start  = theme.settings.get('header_slot_start')  | default('logo') %}
-{% set slot_center = theme.settings.get('header_slot_center') | default('menu') %}
-{% set slot_end    = theme.settings.get('header_slot_end')    | default('actions') %}
+{# ══════════════════════════════════════════════════════════════
+   SAFE SLOT VALUE EXTRACTION
+   Handles: string "logo" | array ["logo"] | [{value:"logo",...}]
+   ══════════════════════════════════════════════════════════════ #}
+{% set _raw_start  = theme.settings.get('header_slot_start') %}
+{% set _raw_center = theme.settings.get('header_slot_center') %}
+{% set _raw_end    = theme.settings.get('header_slot_end') %}
 
-{# ── Header Behavior ─────────────────────────────────────── #}
+{# If Salla returns an array of objects ({value, label}), pull .value #}
+{# If it returns a plain array, pull first item                        #}
+{# Otherwise use the raw string directly                               #}
+{% if _raw_start is iterable %}
+  {% set slot_start = attribute(_raw_start|first, 'value') | default(_raw_start|first) | default('logo') %}
+{% else %}
+  {% set slot_start = _raw_start | default('logo') %}
+{% endif %}
+
+{% if _raw_center is iterable %}
+  {% set slot_center = attribute(_raw_center|first, 'value') | default(_raw_center|first) | default('menu') %}
+{% else %}
+  {% set slot_center = _raw_center | default('menu') %}
+{% endif %}
+
+{% if _raw_end is iterable %}
+  {% set slot_end = attribute(_raw_end|first, 'value') | default(_raw_end|first) | default('actions') %}
+{% else %}
+  {% set slot_end = _raw_end | default('actions') %}
+{% endif %}
+
+{# ── Header Behavior ─────────────────────────────────────────── #}
 {% set header_is_transparent = theme.settings.get('header_is_transparent') | default(false) %}
-{% set header_show_topbar    = theme.settings.get('header_show_topbar') | default(true) %}
+{% set header_show_topbar    = theme.settings.get('header_show_topbar')    | default(true) %}
 {% set topnav_is_dark        = theme.settings.get('topnav_is_dark') %}
 {% set important_links       = theme.settings.get('important_links') %}
 
-{# ── CTA Slot Data ───────────────────────────────────────── #}
+{# ── CTA data (forwarded to _slot.twig) ─────────────────────── #}
 {% set header_cta_text = theme.settings.get('header_cta_text') | default('احجز الآن') %}
 {% set header_cta_url  = theme.settings.get('header_cta_url')  | default(store.url) %}
 
-{# ══════════════════════════════════════════════════════════
-   SLOT RENDERER MACRO
-   ══════════════════════════════════════════════════════════ #}
-{% macro render_slot(slot, cta_text, cta_url) %}
+{# ── Shared include variables for all slot calls ─────────────── #}
+{% set _slot_vars = { cta_text: header_cta_text, cta_url: header_cta_url } %}
 
-  {# ── Logo ──────────────────────────────────────────────── #}
-  {% if slot == 'logo' %}
-    <a class="header-logo" href="{{ store.url }}" aria-label="{{ store.name }}">
-      <img
-        fetchpriority="high"
-        width="auto"
-        height="48"
-        loading="eager"
-        src="{{ store.logo|cdn(175) }}"
-        alt="{{ store.name }} logo"
-      >
-      {% if is_page('index') %}
-        <h1 class="sr-only">{{ store.name }}</h1>
-      {% else %}
-        <h2 class="sr-only">{{ store.name }}</h2>
-      {% endif %}
-    </a>
-
-  {# ── Main Menu ─────────────────────────────────────────── #}
-  {% elseif slot == 'menu' %}
-    <custom-main-menu></custom-main-menu>
-
-  {# ── Search Bar ────────────────────────────────────────── #}
-  {% elseif slot == 'search' %}
-    <div class="header-slot-search">
-      <salla-search inline oval height="36"></salla-search>
-    </div>
-
-  {# ── CTA Button ────────────────────────────────────────── #}
-  {% elseif slot == 'cta_button' %}
-    <a href="{{ cta_url }}" class="header-cta-btn">
-      <span>{{ cta_text }}</span>
-      <i class="sicon-arrow-left rtl:inline-block ltr:hidden text-sm"></i>
-      <i class="sicon-arrow-right ltr:inline-block rtl:hidden text-sm"></i>
-    </a>
-
-  {# ── Social / Contacts ─────────────────────────────────── #}
-  {% elseif slot == 'social' %}
-    <salla-contacts is-header></salla-contacts>
-
-  {# ── User Actions (Cart + User Menu) ───────────────────── #}
-  {% elseif slot == 'actions' %}
-    <div class="header-actions">
-      <salla-user-menu avatar-only show-header show-trigger></salla-user-menu>
-      <salla-cart-summary class="rtl:me-2 ltr:ms-2">
-        <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
-      </salla-cart-summary>
-    </div>
-
-  {# ── Empty / Spacer ────────────────────────────────────── #}
-  {# slot == 'empty' → renders nothing, space maintained by CSS flex-1 #}
-  {% endif %}
-
-{% endmacro %}
-
-{# ══════════════════════════════════════════════════════════
-   HEADER MARKUP
-   ══════════════════════════════════════════════════════════ #}
+{# ══════════════════════════════════════════════════════════════
+   HEADER ELEMENT
+   ══════════════════════════════════════════════════════════════ #}
 <header
   class="store-header {{ header_is_transparent ? 'header-transparent' : '' }}"
   x-data="{ scrolled: false }"
-  @scroll.window="scrolled = (window.scrollY > 60)"
+  @scroll.window.throttle.50ms="scrolled = (window.scrollY > 60)"
   :class="{ 'header-scrolled': scrolled }"
 >
 
-  {# ══════════════════════════════════════════════════════
-     TOP BAR (optional)
-     ══════════════════════════════════════════════════════ #}
+  {# ════════════════════════════════════════════════════════
+     TOP BAR
+     ════════════════════════════════════════════════════════ #}
   {% if header_show_topbar %}
     <div class="top-navbar {{ topnav_is_dark ? 'topnav-is-dark' : '' }}">
       <div class="container flex justify-between items-center">
 
-        {# Topbar — Start Side #}
         <div class="flex flex-1 items-center gap-2">
-
           {% if important_links %}
             <salla-menu source="footer" topnav></salla-menu>
           {% endif %}
@@ -140,19 +103,17 @@
               {{ store.scope.name }}
             </button>
           {% endif %}
-
         </div>
 
-        {# Topbar — End Side #}
         <salla-contacts is-header></salla-contacts>
 
       </div>
     </div>
   {% endif %}
 
-  {# ══════════════════════════════════════════════════════
+  {# ════════════════════════════════════════════════════════
      MAIN NAV
-     ══════════════════════════════════════════════════════ #}
+     ════════════════════════════════════════════════════════ #}
   <div
     id="mainnav"
     class="main-nav-container"
@@ -162,7 +123,7 @@
       <div class="container">
         <div class="header-matrix">
 
-          {# Mobile Hamburger — always in the start area on small screens #}
+          {# Mobile hamburger — always present, hidden on desktop via lg:hidden #}
           <a
             class="header-mobile-toggle lg:hidden mburger mburger--collapse leading-none"
             href="#mobile-menu"
@@ -171,19 +132,19 @@
             <i class="sicon-menu text-primary text-2xl"></i>
           </a>
 
-          {# ── Slot: Start (RTL = Right, LTR = Left) ──────── #}
+          {# ── Slot: START (RTL = right edge, LTR = left edge) ── #}
           <div class="header-slot header-slot--start">
-            {{ slots.render_slot(slot_start, header_cta_text, header_cta_url) }}
+            {% include 'components/header/_slot.twig' with (_slot_vars | merge({ slot: slot_start })) %}
           </div>
 
-          {# ── Slot: Center ─────────────────────────────────── #}
+          {# ── Slot: CENTER ─────────────────────────────────── #}
           <div class="header-slot header-slot--center">
-            {{ slots.render_slot(slot_center, header_cta_text, header_cta_url) }}
+            {% include 'components/header/_slot.twig' with (_slot_vars | merge({ slot: slot_center })) %}
           </div>
 
-          {# ── Slot: End (RTL = Left, LTR = Right) ──────────── #}
+          {# ── Slot: END (RTL = left edge, LTR = right edge) ─── #}
           <div class="header-slot header-slot--end">
-            {{ slots.render_slot(slot_end, header_cta_text, header_cta_url) }}
+            {% include 'components/header/_slot.twig' with (_slot_vars | merge({ slot: slot_end })) %}
           </div>
 
         </div>
