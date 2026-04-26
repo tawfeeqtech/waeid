@@ -213,3 +213,199 @@ salla-user-menu{
     @apply z-10;
   }
 }
+
+/* ============================================================
+   SMART HEADER MATRIX — Slot Layout System
+   ============================================================ */
+
+// ── 3-Column Grid (start · center · end) ──────────────────────
+.header-matrix {
+  @apply flex items-center justify-between relative w-full py-3 lg:py-0 min-h-[68px] lg:min-h-[84px];
+
+  // Mobile toggle lives before all slots; hidden on desktop
+  .header-mobile-toggle {
+    @apply flex-shrink-0 rtl:ml-3 ltr:mr-3;
+  }
+}
+
+// ── Individual Slot Containers ─────────────────────────────────
+.header-slot {
+  @apply flex items-center;
+
+  &--start {
+    @apply flex-1 justify-start;
+  }
+
+  &--center {
+    // True center: shrinks to content, auto margins keep it centered
+    @apply flex-shrink-0 mx-auto;
+    // On mobile, collapse center slot to save space
+    @screen lg {
+      @apply static;
+    }
+    // Hide center slot on very small screens if it contains a menu
+    // (mobile menu is handled by mmenu via .header-mobile-toggle)
+    custom-main-menu {
+      @apply hidden lg:flex;
+    }
+  }
+
+  &--end {
+    @apply flex-1 justify-end;
+  }
+}
+
+// ── Header Logo ────────────────────────────────────────────────
+.header-logo {
+  @apply flex items-center my-2 lg:my-0 flex-shrink-0;
+
+  img {
+    @apply w-auto max-h-12 max-w-[100px] xs:max-w-[170px] object-contain;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+  }
+}
+
+// ── Header Actions (cart + user) ───────────────────────────────
+.header-actions {
+  @apply flex items-center my-2.5;
+
+  salla-user-menu {
+    @apply shrink-0;
+  }
+}
+
+// ── Search inside a slot ───────────────────────────────────────
+.header-slot-search {
+  @apply w-full max-w-xs lg:max-w-sm;
+
+  .s-search-results {
+    @apply z-10;
+  }
+}
+
+/* ============================================================
+   PREMIUM CTA BUTTON
+   ============================================================ */
+.header-cta-btn {
+  @apply inline-flex items-center gap-1.5
+         px-5 py-2
+         bg-primary text-white
+         text-sm font-semibold
+         rounded-full
+         shadow-md
+         whitespace-nowrap
+         transition-all duration-300
+         hover:shadow-lg hover:opacity-90 hover:-translate-y-px;
+
+  // Dark mode
+  .dark & {
+    @apply bg-primary/90;
+  }
+}
+
+/* ============================================================
+   TRANSPARENT HEADER (Hero Overlay Mode)
+   ============================================================ */
+.header-transparent {
+  // Position header over the hero section
+  @apply absolute top-0 inset-x-0 z-30;
+
+  // Transparent main nav
+  .main-nav-container {
+    @apply bg-transparent shadow-none;
+  }
+
+  // Logo invert to white on dark hero backgrounds
+  .header-logo img {
+    filter: brightness(0) invert(1);
+    @apply opacity-90;
+  }
+
+  // Icons & text to white
+  .sicon-menu,
+  .header-btn__icon {
+    @apply text-white border-white/30;
+  }
+
+  // CTA button on transparent bg: outlined white
+  .header-cta-btn {
+    @apply bg-white/15 border border-white/40 backdrop-blur-sm;
+
+    &:hover {
+      @apply bg-white/25;
+    }
+  }
+
+  // Topbar blends with the hero
+  .top-navbar {
+    @apply bg-black/20 text-white;
+
+    .btn--rounded-gray {
+      @apply bg-white/10 text-white border-white/20 hover:bg-white/20;
+    }
+  }
+}
+
+// ── When scrolled: revert to solid white ──────────────────────
+.header-transparent.header-scrolled {
+  @apply relative;
+
+  .header-logo img {
+    filter: none;
+    @apply opacity-100;
+  }
+
+  .sicon-menu,
+  .header-btn__icon {
+    @apply text-primary border-gray-200;
+  }
+
+  .header-cta-btn {
+    @apply bg-primary text-white border-transparent;
+  }
+
+  .top-navbar {
+    @apply bg-white text-gray-700;
+
+    .btn--rounded-gray {
+      @apply bg-gray-100 text-gray-700 border-gray-200;
+    }
+  }
+}
+
+/* ============================================================
+   SCROLLED STATE — Glass Morphism
+   ============================================================ */
+// Applied via Alpine :class="{ 'header-scrolled': scrolled }"
+.header-scrolled {
+  .main-nav-container {
+    // Glass-morphism panel when pinned
+    .inner {
+      @apply bg-white/95 shadow-default;
+      // backdrop-filter via arbitrary utility if supported
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+  }
+}
+
+/* ============================================================
+   DARK MODE OVERRIDES
+   ============================================================ */
+.dark {
+  .main-nav-container {
+    @apply bg-dark;
+
+    .header-logo img {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  .header-scrolled .main-nav-container .inner {
+    @apply bg-dark/95;
+  }
+
+  .header-cta-btn {
+    @apply bg-primary;
+  }
+}

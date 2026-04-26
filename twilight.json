@@ -130,6 +130,140 @@
         },
         {
             "type": "static",
+            "id": "static-line-header-matrix",
+            "format": "line"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "static-label-header-matrix",
+            "value": "<div class='rounded-lg' style='background-color: #0f2027; background-image: linear-gradient(135deg,#0f2027,#203a43,#2c5364); display:flex; justify-content:center; align-items:center; padding:15px; margin-bottom:20px !important; flex-direction:column; gap:8px;'><h6 style='color:#ffffff; font-size:15px; font-weight:bold; margin:0;'>🎯 مصفوفة الهيدر الذكية</h6><p style='color:#a0c4cc; font-size:12px; margin:0;'>خصص ما يظهر في كل منطقة من مناطق الهيدر الثلاث</p></div>",
+            "variant": "h6"
+        },
+        {
+            "id": "header_slot_start",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "المنطقة الأولى (يمين في العربية / يسار في الإنجليزية)",
+            "description": "اختر المحتوى الذي يظهر في بداية الهيدر",
+            "icon": "sicon-layout-grid",
+            "selected": [
+                {
+                    "label": "الشعار (Logo)",
+                    "value": "logo",
+                    "key": "header-slot-start-logo"
+                }
+            ],
+            "options": [
+                { "label": "الشعار (Logo)",            "value": "logo",       "key": "header-slot-start-logo" },
+                { "label": "القائمة الرئيسية (Menu)",  "value": "menu",       "key": "header-slot-start-menu" },
+                { "label": "شريط البحث (Search)",      "value": "search",     "key": "header-slot-start-search" },
+                { "label": "زر الحجز (CTA Button)",    "value": "cta_button", "key": "header-slot-start-cta" },
+                { "label": "وسائل التواصل (Social)",   "value": "social",     "key": "header-slot-start-social" },
+                { "label": "السلة والمستخدم (Actions)","value": "actions",    "key": "header-slot-start-actions" },
+                { "label": "فراغ (Empty)",              "value": "empty",      "key": "header-slot-start-empty" }
+            ],
+            "source": "Manual",
+            "required": true
+        },
+        {
+            "id": "header_slot_center",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "المنطقة الوسطى (Center)",
+            "description": "اختر المحتوى الذي يظهر في وسط الهيدر",
+            "icon": "sicon-layout-grid",
+            "selected": [
+                {
+                    "label": "القائمة الرئيسية (Menu)",
+                    "value": "menu",
+                    "key": "header-slot-center-menu"
+                }
+            ],
+            "options": [
+                { "label": "الشعار (Logo)",            "value": "logo",       "key": "header-slot-center-logo" },
+                { "label": "القائمة الرئيسية (Menu)",  "value": "menu",       "key": "header-slot-center-menu" },
+                { "label": "شريط البحث (Search)",      "value": "search",     "key": "header-slot-center-search" },
+                { "label": "زر الحجز (CTA Button)",    "value": "cta_button", "key": "header-slot-center-cta" },
+                { "label": "وسائل التواصل (Social)",   "value": "social",     "key": "header-slot-center-social" },
+                { "label": "السلة والمستخدم (Actions)","value": "actions",    "key": "header-slot-center-actions" },
+                { "label": "فراغ (Empty)",              "value": "empty",      "key": "header-slot-center-empty" }
+            ],
+            "source": "Manual",
+            "required": true
+        },
+        {
+            "id": "header_slot_end",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "المنطقة الأخيرة (يسار في العربية / يمين في الإنجليزية)",
+            "description": "اختر المحتوى الذي يظهر في نهاية الهيدر",
+            "icon": "sicon-layout-grid",
+            "selected": [
+                {
+                    "label": "السلة والمستخدم (Actions)",
+                    "value": "actions",
+                    "key": "header-slot-end-actions"
+                }
+            ],
+            "options": [
+                { "label": "الشعار (Logo)",            "value": "logo",       "key": "header-slot-end-logo" },
+                { "label": "القائمة الرئيسية (Menu)",  "value": "menu",       "key": "header-slot-end-menu" },
+                { "label": "شريط البحث (Search)",      "value": "search",     "key": "header-slot-end-search" },
+                { "label": "زر الحجز (CTA Button)",    "value": "cta_button", "key": "header-slot-end-cta" },
+                { "label": "وسائل التواصل (Social)",   "value": "social",     "key": "header-slot-end-social" },
+                { "label": "السلة والمستخدم (Actions)","value": "actions",    "key": "header-slot-end-actions" },
+                { "label": "فراغ (Empty)",              "value": "empty",      "key": "header-slot-end-empty" }
+            ],
+            "source": "Manual",
+            "required": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "هيدر شفاف فوق الهيرو",
+            "description": "يجعل الهيدر شفافاً عند أعلى الصفحة ويتحول لخلفية بيضاء عند التمرير",
+            "id": "header_is_transparent",
+            "format": "switch",
+            "required": false,
+            "value": false,
+            "selected": false
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "إظهار الشريط العلوي (Top Bar)",
+            "description": "يتضمن الروابط المهمة، اختيار اللغة والعملة، والفروع",
+            "id": "header_show_topbar",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "string",
+            "icon": "sicon-format-text-alt",
+            "label": "نص زر الحجز في الهيدر",
+            "description": "النص الذي يظهر على زر CTA عند اختياره في أي slot",
+            "id": "header_cta_text",
+            "format": "text",
+            "required": false,
+            "value": "احجز الآن",
+            "placeholder": "احجز الآن"
+        },
+        {
+            "type": "string",
+            "icon": "sicon-link",
+            "label": "رابط زر الحجز في الهيدر",
+            "description": "الرابط الذي يتوجه إليه زر CTA",
+            "id": "header_cta_url",
+            "format": "text",
+            "required": false,
+            "value": "",
+            "placeholder": "https://..."
+        },
+        {
+            "type": "static",
             "id": "static-line3",
             "format": "line"
         },

@@ -1,77 +1,194 @@
 {#
-| Variable         | Type    | Description                     |
-|------------------|---------|---------------------------------|
-| cart             | object  |                                 |
-| cart.items_count | int     |                                 |
-| cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
-#}
-{% set important_links = theme.settings.get('important_links') %}
-<header class="store-header">
-  {# Top Nav #}
-  <div class="top-navbar">
-    <div class="container flex justify-between">
-      <div class="flex-1 flex items-center gap-2">
-          {# Footer Menu #}
+ | Smart Header Matrix v1.0
+ | ========================
+ | Slot Architecture: start · center · end  (RTL-aware via flexbox dir)
+ |
+ | Each slot accepts one of:
+ |   logo | menu | search | cta_button | social | actions | empty
+ |
+ | Slot defaults (classic layout):
+ |   start  → logo
+ |   center → menu
+ |   end    → actions
+ |
+ | Variables passed in:
+ |   cart.items_count  int
+ |   cart.total        string  "١٠٠ ر.س"
+ #}
+{% import _self as slots %}
+
+{# ── Read Slot Assignments ───────────────────────────────── #}
+{% set slot_start  = theme.settings.get('header_slot_start')  | default('logo') %}
+{% set slot_center = theme.settings.get('header_slot_center') | default('menu') %}
+{% set slot_end    = theme.settings.get('header_slot_end')    | default('actions') %}
+
+{# ── Header Behavior ─────────────────────────────────────── #}
+{% set header_is_transparent = theme.settings.get('header_is_transparent') | default(false) %}
+{% set header_show_topbar    = theme.settings.get('header_show_topbar') | default(true) %}
+{% set topnav_is_dark        = theme.settings.get('topnav_is_dark') %}
+{% set important_links       = theme.settings.get('important_links') %}
+
+{# ── CTA Slot Data ───────────────────────────────────────── #}
+{% set header_cta_text = theme.settings.get('header_cta_text') | default('احجز الآن') %}
+{% set header_cta_url  = theme.settings.get('header_cta_url')  | default(store.url) %}
+
+{# ══════════════════════════════════════════════════════════
+   SLOT RENDERER MACRO
+   ══════════════════════════════════════════════════════════ #}
+{% macro render_slot(slot, cta_text, cta_url) %}
+
+  {# ── Logo ──────────────────────────────────────────────── #}
+  {% if slot == 'logo' %}
+    <a class="header-logo" href="{{ store.url }}" aria-label="{{ store.name }}">
+      <img
+        fetchpriority="high"
+        width="auto"
+        height="48"
+        loading="eager"
+        src="{{ store.logo|cdn(175) }}"
+        alt="{{ store.name }} logo"
+      >
+      {% if is_page('index') %}
+        <h1 class="sr-only">{{ store.name }}</h1>
+      {% else %}
+        <h2 class="sr-only">{{ store.name }}</h2>
+      {% endif %}
+    </a>
+
+  {# ── Main Menu ─────────────────────────────────────────── #}
+  {% elseif slot == 'menu' %}
+    <custom-main-menu></custom-main-menu>
+
+  {# ── Search Bar ────────────────────────────────────────── #}
+  {% elseif slot == 'search' %}
+    <div class="header-slot-search">
+      <salla-search inline oval height="36"></salla-search>
+    </div>
+
+  {# ── CTA Button ────────────────────────────────────────── #}
+  {% elseif slot == 'cta_button' %}
+    <a href="{{ cta_url }}" class="header-cta-btn">
+      <span>{{ cta_text }}</span>
+      <i class="sicon-arrow-left rtl:inline-block ltr:hidden text-sm"></i>
+      <i class="sicon-arrow-right ltr:inline-block rtl:hidden text-sm"></i>
+    </a>
+
+  {# ── Social / Contacts ─────────────────────────────────── #}
+  {% elseif slot == 'social' %}
+    <salla-contacts is-header></salla-contacts>
+
+  {# ── User Actions (Cart + User Menu) ───────────────────── #}
+  {% elseif slot == 'actions' %}
+    <div class="header-actions">
+      <salla-user-menu avatar-only show-header show-trigger></salla-user-menu>
+      <salla-cart-summary class="rtl:me-2 ltr:ms-2">
+        <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
+      </salla-cart-summary>
+    </div>
+
+  {# ── Empty / Spacer ────────────────────────────────────── #}
+  {# slot == 'empty' → renders nothing, space maintained by CSS flex-1 #}
+  {% endif %}
+
+{% endmacro %}
+
+{# ══════════════════════════════════════════════════════════
+   HEADER MARKUP
+   ══════════════════════════════════════════════════════════ #}
+<header
+  class="store-header {{ header_is_transparent ? 'header-transparent' : '' }}"
+  x-data="{ scrolled: false }"
+  @scroll.window="scrolled = (window.scrollY > 60)"
+  :class="{ 'header-scrolled': scrolled }"
+>
+
+  {# ══════════════════════════════════════════════════════
+     TOP BAR (optional)
+     ══════════════════════════════════════════════════════ #}
+  {% if header_show_topbar %}
+    <div class="top-navbar {{ topnav_is_dark ? 'topnav-is-dark' : '' }}">
+      <div class="container flex justify-between items-center">
+
+        {# Topbar — Start Side #}
+        <div class="flex flex-1 items-center gap-2">
+
           {% if important_links %}
             <salla-menu source="footer" topnav></salla-menu>
           {% endif %}
 
-          {# Language & Currency Component #}
-          <div class="header-buttons">
-              {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-                  <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray basis-0">
-                      <span>{{ user.language.name }}</span>
-                      <span class="mx-1.5">|</span> <span>{{ currency.symbol }}</span>
-                  </button>
-                  <salla-localization-modal></salla-localization-modal>
-              {% endif %}
-          </div>
-
-          {# Scopes | Branches #}
-          {% if store.scope %}
-              <button class="btn--rounded-gray"
-                      onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})">
-                  <i class="sicon-location rtl:ml-1 ltr:mr-1"></i> {{ store.scope.name }}
+          {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+            <div class="header-buttons">
+              <button
+                type="button"
+                onclick="salla.event.dispatch('localization::open')"
+                class="btn--rounded-gray basis-0"
+              >
+                <span>{{ user.language.name }}</span>
+                <span class="mx-1.5">|</span>
+                <span>{{ currency.symbol }}</span>
               </button>
+              <salla-localization-modal></salla-localization-modal>
+            </div>
           {% endif %}
 
-          {# Search bar #}
-          <div class="header-search flex-1">
-            <salla-search inline oval height="36"></salla-search>
-          </div>
-      </div>
+          {% if store.scope %}
+            <button
+              class="btn--rounded-gray"
+              onclick="salla.event.dispatch('scopes::open', {'mode': 'default'})"
+            >
+              <i class="sicon-location rtl:ml-1 ltr:mr-1"></i>
+              {{ store.scope.name }}
+            </button>
+          {% endif %}
 
-      <salla-contacts is-header></salla-contacts>
+        </div>
+
+        {# Topbar — End Side #}
+        <salla-contacts is-header></salla-contacts>
+
+      </div>
+    </div>
+  {% endif %}
+
+  {# ══════════════════════════════════════════════════════
+     MAIN NAV
+     ══════════════════════════════════════════════════════ #}
+  <div
+    id="mainnav"
+    class="main-nav-container"
+    :class="scrolled ? 'header-nav--solid' : ''"
+  >
+    <div class="inner bg-inherit w-full">
+      <div class="container">
+        <div class="header-matrix">
+
+          {# Mobile Hamburger — always in the start area on small screens #}
+          <a
+            class="header-mobile-toggle lg:hidden mburger mburger--collapse leading-none"
+            href="#mobile-menu"
+            aria-label="فتح القائمة"
+          >
+            <i class="sicon-menu text-primary text-2xl"></i>
+          </a>
+
+          {# ── Slot: Start (RTL = Right, LTR = Left) ──────── #}
+          <div class="header-slot header-slot--start">
+            {{ slots.render_slot(slot_start, header_cta_text, header_cta_url) }}
+          </div>
+
+          {# ── Slot: Center ─────────────────────────────────── #}
+          <div class="header-slot header-slot--center">
+            {{ slots.render_slot(slot_center, header_cta_text, header_cta_url) }}
+          </div>
+
+          {# ── Slot: End (RTL = Left, LTR = Right) ──────────── #}
+          <div class="header-slot header-slot--end">
+            {{ slots.render_slot(slot_end, header_cta_text, header_cta_url) }}
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 
-  {# Main Nav #}
-  <div id="mainnav" class="main-nav-container shadow-default bg-white flex items-center">
-      <div class="inner bg-inherit w-full">
-          <div class="container">
-              <div class="flex items-stretch justify-between relative">
-                  <div class="flex items-center">
-                      <a class="lg:hidden mburger mburger--collapse leading-none rtl:ml-4 ltr:mr-4" href="#mobile-menu" aria-label="Open-menu">
-                        <i class="sicon-menu text-primary text-2xl"></i>
-                      </a>
-                      <a class="navbar-brand" href="{{ store.url }}">
-                          <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo|cdn(175) }}" alt="{{ store.name }} logo">
-                          {% if is_page('index') %}
-                            <h1 class="sr-only">{{ store.name }}</h1>
-                          {% else %}
-                            <h2 class="sr-only">{{ store.name }}</h2>
-                          {% endif %}
-                      </a>
-                      <custom-main-menu></custom-main-menu>
-                  </div>
-                  <div class="flex items-center justify-end my-2.5">
-                      <salla-user-menu avatar-only show-header show-trigger></salla-user-menu>
-                      <salla-cart-summary class="ml-4 rtl:ml-[unset] rtl:mr-4">
-                        <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
-                      </salla-cart-summary>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
 </header>
