@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const fs=require\\('fs'\\); try{ JSON.parse\\(fs.readFileSync\\('twilight.json','utf8'\\)\\); console.log\\('twilight.json ✓ valid JSON'\\); }catch\\(e\\){ console.error\\('twilight.json ERROR:', e.message\\); }\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --title 'feat\\(header\\): Smart Header Matrix — 3-slot configurable layout' --base master --head claude/dazzling-grothendieck-bd33c3 --body ' *)",
+      "Bash(git remote *)",
+      "Bash(node -e \"const fs=require\\('fs'\\); try{ JSON.parse\\(fs.readFileSync\\('C:\\\\\\\\\\\\\\\\Users\\\\\\\\\\\\\\\\tawfe\\\\\\\\\\\\\\\\CascadeProjects\\\\\\\\\\\\\\\\waeid\\\\\\\\\\\\\\\\.claude\\\\\\\\\\\\\\\\worktrees\\\\\\\\\\\\\\\\dazzling-grothendieck-bd33c3\\\\\\\\\\\\\\\\config.json','utf8'\\)\\); console.log\\('valid'\\); }catch\\(e\\){ console.error\\('INVALID:',e.message\\); }\")",
+      "Bash(node -e \"try{ JSON.parse\\(require\\('fs'\\).readFileSync\\('config.json','utf8'\\)\\); console.log\\('valid'\\); }catch\\(e\\){ console.error\\('INVALID:',e.message\\); }\")",
+      "Bash(node -e \"try{ JSON.parse\\(require\\('fs'\\).readFileSync\\('config.json','utf8'\\)\\); console.log\\('config.json ✓'\\); JSON.parse\\(require\\('fs'\\).readFileSync\\('twilight.json','utf8'\\)\\); console.log\\('twilight.json ✓'\\); }catch\\(e\\){ console.error\\('ERROR:',e.message\\); }\")",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"['twilight.json','config.json'].forEach\\(f=>{try{JSON.parse\\(require\\('fs'\\).readFileSync\\(f,'utf8'\\)\\);console.log\\(f,'✓'\\)}catch\\(e\\){console.error\\(f,'✗',e.message\\)}}\\)\")",
+      "Bash(npm run *)",
+      "Bash(salla theme *)"
+    ]
+  }
+}
