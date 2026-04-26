@@ -13,7 +13,10 @@
       "Bash(node -e ' *)",
       "Bash(node -e \"['twilight.json','config.json'].forEach\\(f=>{try{JSON.parse\\(require\\('fs'\\).readFileSync\\(f,'utf8'\\)\\);console.log\\(f,'✓'\\)}catch\\(e\\){console.error\\(f,'✗',e.message\\)}}\\)\")",
       "Bash(npm run *)",
-      "Bash(salla theme *)"
+      "Bash(salla theme *)",
+      "Bash(npx salla *)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('twilight.json','utf8'\\)\\);console.log\\('twilight.json: VALID'\\)\")",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('config.json','utf8'\\)\\);console.log\\('config.json: VALID'\\)\")"
     ]
   }
 }
