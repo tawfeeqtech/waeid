@@ -101,8 +101,14 @@
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
 </head>
-{% set _theme_preset = theme.settings.get('theme_preset') | default('default') %}
-{% set _is_dark      = theme.settings.get('footer_is_dark') %}
+{# ── Safe extraction: dropdown-list returns [{value:...}] not string ── #}
+{% set _raw_preset = theme.settings.get('theme_preset') %}
+{% if _raw_preset is iterable %}
+  {% set _theme_preset = attribute(_raw_preset|first, 'value') | default(_raw_preset|first) | default('default') %}
+{% else %}
+  {% set _theme_preset = _raw_preset | default('default') %}
+{% endif %}
+{% set _is_dark = theme.settings.get('footer_is_dark') %}
 <body
   id="app"
   data-theme="{{ _theme_preset }}"
