@@ -3,7 +3,7 @@
         "ar": "ثيم المدربين",
         "en": "Coach Theme"
     },
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "Theme Developer",
     "description": {
         "ar": "ثيم احترافي مخصص للمدربين والمعلمين",
@@ -18,27 +18,9 @@
                 "en": "Header Style"
             },
             "options": [
-                {
-                    "label": {
-                        "ar": "كلاسيكي",
-                        "en": "Classic"
-                    },
-                    "value": "classic"
-                },
-                {
-                    "label": {
-                        "ar": "عصري",
-                        "en": "Modern"
-                    },
-                    "value": "modern"
-                },
-                {
-                    "label": {
-                        "ar": "بسيط",
-                        "en": "Minimal"
-                    },
-                    "value": "minimal"
-                }
+                {"label": {"ar": "كلاسيكي", "en": "Classic"},  "value": "classic"},
+                {"label": {"ar": "عصري",    "en": "Modern"},   "value": "modern"},
+                {"label": {"ar": "بسيط",    "en": "Minimal"},  "value": "minimal"}
             ],
             "default": "classic"
         },
@@ -68,27 +50,9 @@
                 "en": "Testimonials Display"
             },
             "options": [
-                {
-                    "label": {
-                        "ar": "شريط متحرك",
-                        "en": "Carousel"
-                    },
-                    "value": "carousel"
-                },
-                {
-                    "label": {
-                        "ar": "شبكة",
-                        "en": "Grid"
-                    },
-                    "value": "grid"
-                },
-                {
-                    "label": {
-                        "ar": "قائمة",
-                        "en": "List"
-                    },
-                    "value": "list"
-                }
+                {"label": {"ar": "شريط متحرك", "en": "Carousel"}, "value": "carousel"},
+                {"label": {"ar": "شبكة",       "en": "Grid"},     "value": "grid"},
+                {"label": {"ar": "قائمة",      "en": "List"},     "value": "list"}
             ],
             "default": "carousel"
         },
@@ -153,8 +117,7 @@
                 "ar": "أدخل السنوات",
                 "en": "Enter years"
             }
-        }
-    },
+        },
         {
             "id": "smart_survey",
             "type": "checkbox",
@@ -198,6 +161,54 @@
                 "en": "Show Survey on Product Page"
             },
             "default": true
+        },
+        {
+            "id": "hero_variant",
+            "type": "select",
+            "label": {
+                "ar": "نمط قسم الهيرو",
+                "en": "Hero Section Variant"
+            },
+            "options": [
+                {"label": {"ar": "محتوى في المنتصف",          "en": "Centered"},        "value": "centered"},
+                {"label": {"ar": "محتوى وصورة جنباً لجنب",    "en": "Split"},           "value": "split"},
+                {"label": {"ar": "خلفية فيديو",               "en": "Video Background"},"value": "video"},
+                {"label": {"ar": "بطاقة فوق الصورة",          "en": "Overlay Card"},    "value": "overlay"}
+            ],
+            "default": "centered"
+        },
+        {
+            "id": "hero_cta_text",
+            "type": "text",
+            "label": {
+                "ar": "نص زر CTA في الهيرو",
+                "en": "Hero CTA Button Text"
+            },
+            "default": "احجز مكانك الآن",
+            "placeholder": {
+                "ar": "احجز مكانك الآن",
+                "en": "Book Your Spot Now"
+            }
+        },
+        {
+            "id": "hero_show_stats",
+            "type": "checkbox",
+            "label": {
+                "ar": "عرض الإحصائيات في الهيرو",
+                "en": "Show Stats in Hero"
+            },
+            "default": true
+        },
+        {
+            "id": "hero_overlay_opacity",
+            "type": "number",
+            "label": {
+                "ar": "شفافية طبقة الظلام في الهيرو (0-100)",
+                "en": "Hero Overlay Opacity (0-100)"
+            },
+            "default": 55,
+            "min": 0,
+            "max": 100
         }
     ],
     "assets": {

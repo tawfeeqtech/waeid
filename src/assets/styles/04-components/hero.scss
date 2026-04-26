@@ -1,0 +1,244 @@
+/* ============================================================
+   HERO SECTION MATRIX — All 4 Variants
+   ============================================================ */
+
+/* ── Shared base ──────────────────────────────────────────────── */
+.hero-section {
+  @apply relative w-full;
+
+  // Background image fills the section
+  .hero-bg-img {
+    @apply absolute inset-0 w-full h-full object-cover;
+    // GPU compositing hint — avoids layout shift during LCP load
+    will-change: transform;
+  }
+}
+
+/* ── Content Block ────────────────────────────────────────────── */
+.hero-content-block {
+  @apply flex flex-col items-center text-center gap-4 sm:gap-5 max-w-3xl mx-auto;
+
+  // Split variant: content aligns to start (not centered)
+  .hero-section--split & {
+    @apply items-start text-start mx-0 max-w-xl;
+  }
+
+  // Overlay card variant: aligns to start inside the card
+  .hero-overlay-card & {
+    @apply items-start text-start mx-0 max-w-lg;
+  }
+}
+
+/* ── Badge ────────────────────────────────────────────────────── */
+.hero-badge {
+  @apply inline-flex items-center gap-1.5
+         px-3.5 py-1
+         text-xs font-semibold tracking-wide uppercase
+         rounded-full
+         bg-primary/10 text-primary
+         border border-primary/20;
+
+  .hero-section--centered &,
+  .hero-section--video & {
+    @apply bg-white/15 text-white border-white/25 backdrop-blur-sm;
+  }
+
+  &__dot {
+    @apply w-1.5 h-1.5 rounded-full bg-primary animate-pulse;
+
+    .hero-section--centered &,
+    .hero-section--video & {
+      @apply bg-white;
+    }
+  }
+}
+
+/* ── Headline ─────────────────────────────────────────────────── */
+.hero-title {
+  @apply text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight;
+  // Optical letter-spacing for large Arabic type
+  word-spacing: 0.04em;
+}
+
+/* ── Subtitle ─────────────────────────────────────────────────── */
+.hero-subtitle {
+  @apply text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl;
+
+  .hero-content-block & {
+    @apply mx-auto;
+  }
+
+  .hero-section--split &,
+  .hero-overlay-card & {
+    @apply mx-0;
+  }
+}
+
+/* ── Statistics Row ───────────────────────────────────────────── */
+.hero-stats {
+  @apply flex items-center flex-wrap gap-0 mt-1;
+}
+
+.hero-stat {
+  @apply flex flex-col items-center px-5 py-1;
+
+  &--light {
+    @apply text-white;
+  }
+
+  &__number {
+    @apply text-2xl sm:text-3xl font-extrabold leading-none;
+  }
+
+  &__label {
+    @apply text-xs font-medium mt-0.5 whitespace-nowrap;
+  }
+}
+
+.hero-stat-divider {
+  @apply w-px h-8 flex-shrink-0;
+}
+
+/* ── CTA Buttons ──────────────────────────────────────────────── */
+.hero-ctas {
+  @apply flex flex-wrap items-center gap-3 mt-1;
+
+  .hero-content-block & {
+    @apply justify-center;
+  }
+
+  .hero-section--split &,
+  .hero-overlay-card & {
+    @apply justify-start;
+  }
+}
+
+.hero-btn {
+  @apply inline-flex items-center gap-2
+         px-6 py-3
+         text-sm sm:text-base font-semibold
+         rounded-full
+         transition-all duration-300
+         whitespace-nowrap
+         focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+
+  &--primary {
+    @apply bg-primary text-white shadow-lg
+           hover:shadow-xl hover:opacity-90 hover:-translate-y-px
+           focus-visible:outline-primary;
+  }
+
+  &--secondary {
+    @apply bg-white text-gray-800 border border-gray-200 shadow-sm
+           hover:bg-gray-50 hover:shadow-md hover:-translate-y-px;
+  }
+
+  &--secondary-light {
+    // On dark (centered/video) the secondary btn is ghost/white
+    @apply bg-white/10 text-white border-white/30 backdrop-blur-sm
+           hover:bg-white/20;
+  }
+}
+
+/* ============================================================
+   VARIANT: CENTERED
+   ============================================================ */
+.hero-section--centered {
+  // Done via Tailwind in the Twig template
+}
+
+/* ============================================================
+   VARIANT: SPLIT
+   ============================================================ */
+.hero-split-grid {
+  @apply grid grid-cols-1 lg:grid-cols-2;
+
+  // media-first: image on start (RTL = right), content on end
+  &--media-first {
+    .hero-split__content { @apply lg:order-last; }
+    .hero-split__media   { @apply lg:order-first; }
+  }
+}
+
+.hero-split__content {
+  @apply px-6 sm:px-10 lg:px-14 xl:px-20 py-12;
+}
+
+.hero-split__content-inner {
+  @apply max-w-md;
+}
+
+.hero-split__media {
+  @apply relative min-h-[380px] lg:min-h-full;
+
+  img {
+    @apply w-full h-full object-cover min-h-[380px] lg:min-h-0;
+  }
+}
+
+// Soft edge-fade from media toward content — makes the cut less harsh
+.hero-split__media-fade {
+  @apply absolute inset-y-0 w-32 pointer-events-none hidden lg:block;
+
+  &--start {
+    // Fade from the start (RTL: right edge)
+    @apply start-0;
+    background: linear-gradient(to var(--tw-gradient-direction, right), white 0%, transparent 100%);
+  }
+
+  &--end {
+    // Fade from the end (RTL: left edge)
+    @apply end-0;
+    background: linear-gradient(to var(--tw-gradient-direction, left), white 0%, transparent 100%);
+  }
+}
+
+/* ============================================================
+   VARIANT: VIDEO
+   ============================================================ */
+.hero-section--video {
+  // YouTube iframe scales to cover the section
+  .hero-yt-iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; // 16:9 aspect ratio
+    min-height: 100%;
+    min-width: 177.78vh; // 16:9 inverse
+    transform: translate(-50%, -50%);
+    border: none;
+    pointer-events: none;
+  }
+}
+
+/* ============================================================
+   VARIANT: OVERLAY CARD
+   ============================================================ */
+.hero-overlay-card {
+  @apply bg-white/90 backdrop-blur-md
+         rounded-2xl shadow-huge
+         p-8 sm:p-10
+         max-w-sm sm:max-w-md;
+
+  // Dark mode: card inverts
+  .dark & {
+    @apply bg-gray-900/90 text-white;
+  }
+}
+
+/* ============================================================
+   DARK MODE OVERRIDES
+   ============================================================ */
+.dark {
+  .hero-btn--secondary {
+    @apply bg-gray-800 text-white border-gray-700;
+
+    &:hover { @apply bg-gray-700; }
+  }
+
+  .hero-split__media-fade {
+    &--start { background: linear-gradient(to right, var(--color-dark, #0f172a) 0%, transparent 100%); }
+    &--end   { background: linear-gradient(to left, var(--color-dark, #0f172a) 0%, transparent 100%); }
+  }
+}
