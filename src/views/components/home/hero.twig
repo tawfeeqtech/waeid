@@ -134,7 +134,7 @@
   {% if v_image %}
     <img
       class="hero-bg-img absolute inset-0 w-full h-full object-cover"
-      src="{{ v_image | resize(1920, 1080) | cdn }}"
+      src="{{ v_image | cdn(1920) }}"
       alt=""
       role="presentation"
       loading="eager"
@@ -190,7 +190,7 @@
       {% if v_image %}
         <img
           class="w-full h-full object-cover min-h-[400px] lg:min-h-full"
-          src="{{ v_image | resize(960, 1080) | cdn }}"
+          src="{{ v_image | cdn(960) }}"
           alt="{{ title | default(store.name) }}"
           loading="eager"
           fetchpriority="high"
@@ -230,7 +230,7 @@
       class="hero-bg-img absolute inset-0 w-full h-full object-cover"
       :class="videoReady ? 'opacity-0' : 'opacity-100'"
       style="transition: opacity 0.8s ease"
-      src="{{ v_image | resize(1920, 1080) | cdn }}"
+      src="{{ v_image | cdn(1920) }}"
       alt=""
       role="presentation"
       loading="eager"
@@ -267,7 +267,7 @@
       muted
       loop
       playsinline
-      poster="{{ v_image | resize(1920, 1080) | cdn }}"
+      poster="{{ v_image | cdn(1920) }}"
     >
       <source src="{{ v_video_id }}" type="video/mp4">
     </video>
@@ -311,7 +311,7 @@
   {% if v_image %}
     <img
       class="hero-bg-img absolute inset-0 w-full h-full object-cover"
-      src="{{ v_image | resize(1920, 1080) | cdn }}"
+      src="{{ v_image | cdn(1920) }}"
       alt=""
       role="presentation"
       loading="eager"
