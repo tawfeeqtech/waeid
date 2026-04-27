@@ -1,24 +1,69 @@
 {% comment %}
-Header section with three different styles based on theme settings
+Smart Header with Salla components
 {% endcomment %}
 
-<header class="{{ settings.header_style }}-header">
-    <nav class="nav">
-        <!-- Logo -->
-        <a href="/" class="nav-logo">
-            {{ store.name }}
-        </a>
-        
-        <!-- Navigation Menu -->
-        <ul class="nav-menu">
-            <li><a href="/">{{ 'home' | t }}</a></li>
-            <li><a href="/about">{{ 'about' | t }}</a></li>
-            <li><a href="/services">{{ 'services' | t }}</a></li>
-            <li><a href="/booking">{{ 'booking' | t }}</a></li>
-            <li><a href="/contact">{{ 'contact' | t }}</a></li>
-        </ul>
-        
-        <!-- Mobile Menu Toggle -->
-        <button class="mobile-menu-toggle">☰</button>
-    </nav>
+<header class="store-header">
+  <!-- Top Bar -->
+  {% if settings.header_show_topbar %}
+  <div class="top-navbar">
+    <div class="container flex justify-between items-center">
+      <div class="flex flex-1 items-center gap-2">
+        {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+          <div class="header-buttons">
+            <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
+              <span>{{ user.language.name }}</span>
+              <span class="mx-1.5">|</span>
+              <span>{{ currency.symbol }}</span>
+            </button>
+            <salla-localization-modal></salla-localization-modal>
+          </div>
+        {% endif %}
+      </div>
+      <salla-contacts is-header></salla-contacts>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Main Navigation -->
+  <div class="main-nav-container">
+    <div class="inner bg-inherit w-full">
+      <div class="container">
+        <div class="header-matrix">
+          
+          <!-- Mobile Menu Toggle -->
+          <a class="header-mobile-toggle lg:hidden mburger mburger--collapse" href="#mobile-menu">
+            <i class="sicon-menu text-primary text-2xl"></i>
+          </a>
+
+          <!-- Logo -->
+          <div class="header-slot header-slot--start">
+            <a class="header-logo" href="{{ store.url }}">
+              <img width="auto" height="48" src="{{ store.logo | cdn(175) }}" alt="{{ store.name }}">
+              {% if is_page('index') %}
+                <h1 class="sr-only">{{ store.name }}</h1>
+              {% else %}
+                <h2 class="sr-only">{{ store.name }}</h2>
+              {% endif %}
+            </a>
+          </div>
+
+          <!-- Main Menu -->
+          <div class="header-slot header-slot--center">
+            <custom-main-menu></custom-main-menu>
+          </div>
+
+          <!-- Actions -->
+          <div class="header-slot header-slot--end">
+            <div class="header-actions">
+              <salla-user-menu avatar-only show-header show-trigger></salla-user-menu>
+              <salla-cart-summary class="rtl:me-2 ltr:ms-2">
+                <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
+              </salla-cart-summary>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </header>

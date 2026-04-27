@@ -6,7 +6,7 @@
     <title>{{ page.title | default(store.name) }}</title>
     
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="{{ 'theme.css' | asset }}">
+    <link rel="stylesheet" href="{{ 'app.css' | asset }}">
     
     <!-- Salla Core CSS -->
     {{ 'salla.css' | asset_tag }}
@@ -19,7 +19,7 @@
 <body class="{{ settings.header_style }}-header {% if settings.dark_mode %}dark-mode{% endif %}">
     
     <!-- Header -->
-    {% component 'header.header' %}
+    {% section 'header' %}
     
     <!-- Main Content -->
     <main>
@@ -30,7 +30,7 @@
     {% section 'footer' %}
     
     <!-- Theme JavaScript -->
-    <script src="{{ 'theme.js' | asset }}"></script>
+    <script src="{{ 'app.js' | asset }}"></script>
     
     <!-- Salla Core JavaScript -->
     {{ 'salla.js' | asset_tag }}

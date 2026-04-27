@@ -2,11 +2,9 @@
 Main homepage template for coaches
 {% endcomment %}
 
-{% component 'header.header' %}
+{% section 'header' %}
 
-{% if settings.advanced_hero %}
-    {% section 'advanced-hero' %}
-{% else %}
+{% section 'advanced-hero' %}
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">

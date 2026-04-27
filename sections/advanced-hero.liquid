@@ -2,7 +2,6 @@
 Advanced hero section with statistics and background image
 {% endcomment %}
 
-{% if settings.advanced_hero %}
 <section class="advanced-hero-section" 
          style="{% if settings.hero_background_image %}background-image: url('{{ settings.hero_background_image | asset }}'); background-size: cover; background-position: center;{% endif %}">
     <div class="container">
@@ -156,4 +155,3 @@ Advanced hero section with statistics and background image
     }
 }
 </style>
-{% endif %}
