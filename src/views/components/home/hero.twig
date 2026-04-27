@@ -119,7 +119,6 @@
 
   </div>
 {% endmacro %}
-{% import _self as hero %}
 
 {# ══════════════════════════════════════════════════════════════
    VARIANT 1: CENTERED
@@ -156,7 +155,7 @@
 
   {# Content #}
   <div class="container relative z-10 text-center">
-    {{ hero.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, true) }}
+    {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, true) }}
   </div>
 </section>
 
@@ -182,7 +181,7 @@
     {# ── Content Column ──────────────────────────────────────── #}
     <div class="hero-split__content {{ h_cls }} flex items-center">
       <div class="hero-split__content-inner">
-        {{ hero.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, false) }}
+        {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, false) }}
       </div>
     </div>
 
@@ -283,7 +282,7 @@
 
   {# Content #}
   <div class="container relative z-10 text-center">
-    {{ hero.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, true) }}
+    {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, true) }}
   </div>
 
 </section>
@@ -332,7 +331,7 @@
   {# Floating Content Card #}
   <div class="container relative z-10 flex {{ c_align }} py-10">
     <div class="hero-overlay-card">
-      {{ hero.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, false) }}
+      {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, false) }}
     </div>
   </div>
 

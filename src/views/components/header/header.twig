@@ -102,23 +102,17 @@
 
           {# ── Slot START  (RTL=right, LTR=left) ─────────── #}
           <div class="header-slot header-slot--start">
-            {% include 'components/header/_slot.twig'
-              with (_slot_vars | merge({ slot: slot_start }))
-              ignore missing %}
+            {% include 'components/header/_slot.twig' with (_slot_vars | merge({ slot: slot_start })) ignore missing %}
           </div>
 
           {# ── Slot CENTER ────────────────────────────────── #}
           <div class="header-slot header-slot--center">
-            {% include 'components/header/_slot.twig'
-              with (_slot_vars | merge({ slot: slot_center }))
-              ignore missing %}
+            {% include 'components/header/_slot.twig' with (_slot_vars | merge({ slot: slot_center })) ignore missing %}
           </div>
 
           {# ── Slot END  (RTL=left, LTR=right) ───────────── #}
           <div class="header-slot header-slot--end">
-            {% include 'components/header/_slot.twig'
-              with (_slot_vars | merge({ slot: slot_end }))
-              ignore missing %}
+            {% include 'components/header/_slot.twig' with (_slot_vars | merge({ slot: slot_end })) ignore missing %}
           </div>
 
         </div>
