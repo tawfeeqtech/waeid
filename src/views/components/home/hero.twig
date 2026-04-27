@@ -34,6 +34,20 @@
  #}
 
 {# ══════════════════════════════════════════════════════════════
+   DEBUG — visible in Page Source. Remove once confirmed working.
+   ══════════════════════════════════════════════════════════════ #}
+<!-- HERO DEBUG ▼ -->
+<!-- variant     = {{ variant     | json_encode }} -->
+<!-- title       = {{ title       | json_encode }} -->
+<!-- subtitle    = {{ subtitle    | json_encode }} -->
+<!-- badge_text  = {{ badge_text  | json_encode }} -->
+<!-- cta_text    = {{ cta_text    | json_encode }} -->
+<!-- cta_url    = {{ cta_url     | json_encode }} -->
+<!-- image       = {{ image       | json_encode }} -->
+<!-- show_stats  = {{ show_stats  | json_encode }} -->
+<!-- HERO DEBUG ▲ -->
+
+{# ══════════════════════════════════════════════════════════════
    RESOLVE FIELDS WITH SANE DEFAULTS
    ══════════════════════════════════════════════════════════════ #}
 {% set v_variant   = variant        | default('centered') %}
