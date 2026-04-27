@@ -12,9 +12,21 @@
 {# ══════════════════════════════════════════════════════════════
    SLOT VALUE — safe for string, array, or [{value}] from Salla
    ══════════════════════════════════════════════════════════════ #}
-{% set slot_start  = theme.settings.get('header_slot_start')[0].value | default('logo') %}
-{% set slot_center = theme.settings.get('header_slot_center')[0].value | default('menu') %}
-{% set slot_end    = theme.settings.get('header_slot_end')[0].value | default('actions') %}
+{# جلب القيم الخام #}
+{% set _raw_start  = theme.settings.get('header_slot_start') %}
+{% set _raw_center = theme.settings.get('header_slot_center') %}
+{% set _raw_end    = theme.settings.get('header_slot_end') %}
+
+{# استخراج القيمة بأمان #}
+{% set slot_start  = _raw_start.0.value ?: _raw_start.value ?: _raw_start ?: 'logo' %}
+{% set slot_center = _raw_center.0.value ?: _raw_center.value ?: _raw_center ?: 'menu' %}
+{% set slot_end    = _raw_end.0.value ?: _raw_end.value ?: _raw_end ?: 'actions' %}
+
+{# --- كود فحص مؤقت (احذفه بعد التأكد) --- #}
+{% set _slot_vars = { 
+    cta_text: theme.settings.get('header_cta_text') | default('احجز الآن'), 
+    cta_url: theme.settings.get('header_cta_url') | default(store.url) 
+} %}
 
 {# ── Behavior ─────────────────────────────────────────────── #}
 {% set header_is_transparent = theme.settings.get('header_is_transparent') | default(false) %}
