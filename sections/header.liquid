@@ -1,69 +1,65 @@
 {% comment %}
-Smart Header with Salla components
+Smart Header with Salla components - Fixed Version
 {% endcomment %}
 
-<header class="store-header">
-  <!-- Top Bar -->
-  {% if settings.header_show_topbar %}
-  <div class="top-navbar">
-    <div class="container flex justify-between items-center">
-      <div class="flex flex-1 items-center gap-2">
-        {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-          <div class="header-buttons">
-            <button type="button" onclick="salla.event.dispatch('localization::open')" class="btn--rounded-gray">
-              <span>{{ user.language.name }}</span>
-              <span class="mx-1.5">|</span>
-              <span>{{ currency.symbol }}</span>
-            </button>
-            <salla-localization-modal></salla-localization-modal>
-          </div>
-        {% endif %}
-      </div>
-      <salla-contacts is-header></salla-contacts>
-    </div>
-  </div>
-  {% endif %}
-
-  <!-- Main Navigation -->
-  <div class="main-nav-container">
-    <div class="inner bg-inherit w-full">
-      <div class="container">
-        <div class="header-matrix">
-          
-          <!-- Mobile Menu Toggle -->
-          <a class="header-mobile-toggle lg:hidden mburger mburger--collapse" href="#mobile-menu">
-            <i class="sicon-menu text-primary text-2xl"></i>
+<header class="store-header" style="background: white; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 1000;">
+  
+  <!-- Main Navigation - Simplified -->
+  <div class="main-nav-container" style="background: white;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+      <div class="header-content" style="display: flex; align-items: center; justify-content: space-between; height: 64px;">
+        
+        <!-- Logo -->
+        <div class="header-logo" style="flex-shrink: 0;">
+          <a href="{{ store.url }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+            <img width="auto" height="40" src="{{ store.logo | cdn(175) }}" alt="{{ store.name }}" style="max-height: 40px;">
           </a>
-
-          <!-- Logo -->
-          <div class="header-slot header-slot--start">
-            <a class="header-logo" href="{{ store.url }}">
-              <img width="auto" height="48" src="{{ store.logo | cdn(175) }}" alt="{{ store.name }}">
-              {% if is_page('index') %}
-                <h1 class="sr-only">{{ store.name }}</h1>
-              {% else %}
-                <h2 class="sr-only">{{ store.name }}</h2>
-              {% endif %}
-            </a>
-          </div>
-
-          <!-- Main Menu -->
-          <div class="header-slot header-slot--center">
-            <custom-main-menu></custom-main-menu>
-          </div>
-
-          <!-- Actions -->
-          <div class="header-slot header-slot--end">
-            <div class="header-actions">
-              <salla-user-menu avatar-only show-header show-trigger></salla-user-menu>
-              <salla-cart-summary class="rtl:me-2 ltr:ms-2">
-                <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
-              </salla-cart-summary>
-            </div>
-          </div>
-
         </div>
+
+        <!-- Main Menu -->
+        <div class="header-menu" style="flex: 1; display: flex; justify-content: center;">
+          <nav style="display: flex; gap: 2rem;">
+            <a href="/" style="color: #374151; text-decoration: none; font-weight: 500;">{{ 'home' | t | default: 'Home' }}</a>
+            <a href="/about" style="color: #374151; text-decoration: none; font-weight: 500;">{{ 'about' | t | default: 'About' }}</a>
+            <a href="/services" style="color: #374151; text-decoration: none; font-weight: 500;">{{ 'services' | t | default: 'Services' }}</a>
+            <a href="/contact" style="color: #374151; text-decoration: none; font-weight: 500;">{{ 'contact' | t | default: 'Contact' }}</a>
+          </nav>
+        </div>
+
+        <!-- Actions -->
+        <div class="header-actions" style="display: flex; align-items: center; gap: 1rem;">
+          <salla-user-menu avatar-only show-header show-trigger></salla-user-menu>
+          <salla-cart-summary style="position: relative;">
+            <i class="sicon-shopping-bag" style="font-size: 20px; color: #374151;"></i>
+          </salla-cart-summary>
+        </div>
+
       </div>
     </div>
   </div>
+  
 </header>
+
+<style>
+.store-header {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header-content a:hover {
+  color: #2563eb !important;
+}
+
+@media (max-width: 768px) {
+  .header-menu {
+    display: none !important;
+  }
+  
+  .header-content {
+    height: 56px !important;
+  }
+  
+  .header-logo img {
+    height: 32px !important;
+  }
+}
+</style>
