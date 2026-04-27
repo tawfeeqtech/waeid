@@ -12,27 +12,9 @@
 {# ══════════════════════════════════════════════════════════════
    SLOT VALUE — safe for string, array, or [{value}] from Salla
    ══════════════════════════════════════════════════════════════ #}
-{% set _raw_start  = theme.settings.get('header_slot_start') %}
-{% set _raw_center = theme.settings.get('header_slot_center') %}
-{% set _raw_end    = theme.settings.get('header_slot_end') %}
-
-{% if _raw_start is iterable %}
-  {% set slot_start = attribute(_raw_start|first, 'value') | default(_raw_start|first) | default('logo') %}
-{% else %}
-  {% set slot_start = _raw_start | default('logo') %}
-{% endif %}
-
-{% if _raw_center is iterable %}
-  {% set slot_center = attribute(_raw_center|first, 'value') | default(_raw_center|first) | default('menu') %}
-{% else %}
-  {% set slot_center = _raw_center | default('menu') %}
-{% endif %}
-
-{% if _raw_end is iterable %}
-  {% set slot_end = attribute(_raw_end|first, 'value') | default(_raw_end|first) | default('actions') %}
-{% else %}
-  {% set slot_end = _raw_end | default('actions') %}
-{% endif %}
+{% set slot_start  = theme.settings.get('header_slot_start')[0].value | default('logo') %}
+{% set slot_center = theme.settings.get('header_slot_center')[0].value | default('menu') %}
+{% set slot_end    = theme.settings.get('header_slot_end')[0].value | default('actions') %}
 
 {# ── Behavior ─────────────────────────────────────────────── #}
 {% set header_is_transparent = theme.settings.get('header_is_transparent') | default(false) %}
