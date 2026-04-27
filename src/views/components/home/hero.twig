@@ -34,28 +34,48 @@
  #}
 
 {# ══════════════════════════════════════════════════════════════
-   DEBUG — visible in Page Source. Remove once confirmed working.
+   PULL FIELDS FROM `component` NAMESPACE
+   ──────────────────────────────────────────────────────────────
+   In Salla, registered components receive their fields under
+   `component.*`, NOT as top-level variables.
+   The `variant` field is type=items/dropdown-list → array of objects.
    ══════════════════════════════════════════════════════════════ #}
-<!-- HERO DEBUG ▼ -->
-<!-- variant     = {{ variant     | json_encode }} -->
-<!-- title       = {{ title       | json_encode }} -->
-<!-- subtitle    = {{ subtitle    | json_encode }} -->
-<!-- badge_text  = {{ badge_text  | json_encode }} -->
-<!-- cta_text    = {{ cta_text    | json_encode }} -->
-<!-- cta_url    = {{ cta_url     | json_encode }} -->
-<!-- image       = {{ image       | json_encode }} -->
-<!-- show_stats  = {{ show_stats  | json_encode }} -->
-<!-- HERO DEBUG ▲ -->
+{% set _raw_variant = component.variant %}
+{% set v_variant = 'centered' %}
+{% if _raw_variant is iterable and _raw_variant|length > 0 %}
+  {% set _f = _raw_variant|first %}
+  {% set v_variant = (_f is iterable) ? (attribute(_f, 'value') | default('centered')) : (_f | default('centered')) %}
+{% elseif _raw_variant is not empty %}
+  {% set v_variant = _raw_variant %}
+{% endif %}
 
-{# ══════════════════════════════════════════════════════════════
-   RESOLVE FIELDS WITH SANE DEFAULTS
-   ══════════════════════════════════════════════════════════════ #}
-{% set v_variant   = variant        | default('centered') %}
-{% set v_height    = min_height     | default('large') %}
-{% set v_opacity   = overlay_opacity | default(55) %}
-{% set v_split_dir = split_direction | default('media-end') %}
-{% set v_image     = image          | default('') %}
-{% set v_video_id  = video_id       | default('') %}
+{% set badge_text   = component.badge_text %}
+{% set title        = component.title %}
+{% set subtitle     = component.subtitle %}
+{% set cta_text     = component.cta_text %}
+{% set cta_url      = component.cta_url %}
+{% set sec_cta_text = component.sec_cta_text %}
+{% set sec_cta_url  = component.sec_cta_url %}
+{% set image        = component.image %}
+{% set video_id     = component.video_id %}
+{% set show_stats   = component.show_stats %}
+{% set stats        = component.stats | default([]) %}
+
+{% set v_height    = component.min_height       | default('large') %}
+{% set v_opacity   = component.overlay_opacity  | default(55) %}
+{% set v_split_dir = component.split_direction  | default('media-end') %}
+{% set v_image     = image                      | default('') %}
+{% set v_video_id  = video_id                   | default('') %}
+
+{# ── Debug — remove after confirming it works ── #}
+<!-- HERO DEBUG ▼ -->
+<!-- v_variant  = {{ v_variant  | json_encode }} -->
+<!-- title      = {{ title      | json_encode }} -->
+<!-- subtitle   = {{ subtitle   | json_encode }} -->
+<!-- badge_text = {{ badge_text | json_encode }} -->
+<!-- cta_text   = {{ cta_text   | json_encode }} -->
+<!-- image      = {{ image      | json_encode }} -->
+<!-- HERO DEBUG ▲ -->
 
 {# ── Height class map ─────────────────────────────────────────── #}
 {% set height_class = {
