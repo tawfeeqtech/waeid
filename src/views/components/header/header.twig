@@ -1,89 +1,61 @@
 {#
- | Smart Header Matrix v1.2  — Production
+ | Smart Header Matrix v1.3  — Production
  | ========================================
  | Architecture: {% include %} (NOT macro) keeps full Salla scope.
  | Slot file: components/header/_slot.twig
- | Slots fallback: logo / menu / actions when settings are unset.
- | include ... ignore missing: silent safety net, never breaks page.
  |
- | Variables: cart.items_count (int), cart.total (string)
+ | CRITICAL: Salla `items/dropdown-list` returns Array of Objects:
+ |   [{ label: "...", value: "logo", key: "..." }]
+ | We MUST extract `.value` from the first element.
+ |
+ | NOTE: Twig {% set %} INSIDE {% for %} does NOT persist to outer
+ | scope. We use direct |first + attribute() instead — DO NOT
+ | switch to a for-loop or slots will silently fall back to defaults.
  #}
 
 {# ══════════════════════════════════════════════════════════════
-   SLOT VALUE — safe for string, array, or [{value}] from Salla
+   1) Raw values from Salla settings
    ══════════════════════════════════════════════════════════════ #}
-{# جلب القيم الخام #}
 {% set _raw_start  = theme.settings.get('header_slot_start') %}
 {% set _raw_center = theme.settings.get('header_slot_center') %}
 {% set _raw_end    = theme.settings.get('header_slot_end') %}
 
-{# استخراج القيمة بأمان - التعامل مع مصفوفة الكائنات #}
-{% set slot_start = 'logo' %}
+{# ══════════════════════════════════════════════════════════════
+   2) Robust extraction — handles ALL possible Salla return shapes:
+      • [{value:"logo",...}]  (normal dropdown-list)
+      • "logo"                (legacy / flattened)
+      • [] or null            (unset)
+      • [{...}, {...}]        (multi-select — take first)
+   Set in if/else (NOT for) so scope persists to outer template.
+   ══════════════════════════════════════════════════════════════ #}
+{% set slot_start  = 'logo' %}
 {% set slot_center = 'menu' %}
-{% set slot_end = 'actions' %}
+{% set slot_end    = 'actions' %}
 
-{# استخدام القيم الفعلية من الإعدادات #}
-{% if _raw_start is iterable and _raw_start | length > 0 %}
-    {% for item in _raw_start %}
-        {% if item.value %}
-            {% set slot_start = item.value %}
-        {% endif %}
-    {% endfor %}
+{% if _raw_start is iterable and _raw_start|length > 0 %}
+  {% set _f = _raw_start|first %}
+  {% set slot_start = (_f is iterable) ? (attribute(_f, 'value') | default('logo')) : (_f | default('logo')) %}
+{% elseif _raw_start is not empty %}
+  {% set slot_start = _raw_start %}
 {% endif %}
 
-{% if _raw_center is iterable and _raw_center | length > 0 %}
-    {% for item in _raw_center %}
-        {% if item.value %}
-            {% set slot_center = item.value %}
-        {% endif %}
-    {% endfor %}
+{% if _raw_center is iterable and _raw_center|length > 0 %}
+  {% set _f = _raw_center|first %}
+  {% set slot_center = (_f is iterable) ? (attribute(_f, 'value') | default('menu')) : (_f | default('menu')) %}
+{% elseif _raw_center is not empty %}
+  {% set slot_center = _raw_center %}
 {% endif %}
 
-{% if _raw_end is iterable and _raw_end | length > 0 %}
-    {% for item in _raw_end %}
-        {% if item.value %}
-            {% set slot_end = item.value %}
-        {% endif %}
-    {% endfor %}
+{% if _raw_end is iterable and _raw_end|length > 0 %}
+  {% set _f = _raw_end|first %}
+  {% set slot_end = (_f is iterable) ? (attribute(_f, 'value') | default('actions')) : (_f | default('actions')) %}
+{% elseif _raw_end is not empty %}
+  {% set slot_end = _raw_end %}
 {% endif %}
 
-{# فحص محتوى المتغيرات للتأكد #}
-{# Debug: طباعة القيم الخام للتأكد #}
-<!-- DEBUG: slot_start = {{ slot_start }} -->
-<!-- DEBUG: slot_center = {{ slot_center }} -->
-<!-- DEBUG: slot_end = {{ slot_end }} -->
-
-{% if _raw_start is iterable and _raw_start | length > 0 %}
-    {% for item in _raw_start %}
-        {% if item.value %}
-            {% set slot_start = item.value %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
-
-{% if _raw_center is iterable and _raw_center | length > 0 %}
-    {% for item in _raw_center %}
-        {% if item.value %}
-            {% set slot_center = item.value %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
-
-{% if _raw_end is iterable and _raw_end | length > 0 %}
-    {% for item in _raw_end %}
-        {% if item.value %}
-            {% set slot_end = item.value %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
-
-{# متغيرات الإعدادات #}
-{% set _slot_vars = { 
-    cta_text: theme.settings.get('header_cta_text') | default('احجز الآن'), 
-    cta_url: theme.settings.get('header_cta_url') | default(store.url) 
-} %}
-
-{# ── Behavior ─────────────────────────────────────────────── #}
+{# ══════════════════════════════════════════════════════════════
+   3) Behavior settings + CTA bundle for slot includes
+   ══════════════════════════════════════════════════════════════ #}
 {% set header_is_transparent = theme.settings.get('header_is_transparent') | default(false) %}
 {% set header_show_topbar    = theme.settings.get('header_show_topbar')    | default(true) %}
 {% set topnav_is_dark        = theme.settings.get('topnav_is_dark')        | default(false) %}
@@ -92,6 +64,16 @@
 {% set header_cta_url        = theme.settings.get('header_cta_url')        | default(store.url) %}
 
 {% set _slot_vars = { cta_text: header_cta_text, cta_url: header_cta_url } %}
+
+{# ══════════════════════════════════════════════════════════════
+   4) DEBUG — visible in Page Source (View → Source). Remove in prod.
+   ══════════════════════════════════════════════════════════════ #}
+<!-- HEADER DEBUG ▼ -->
+<!-- raw_start  type={{ _raw_start  is iterable ? 'array' : 'scalar' }} json={{ _raw_start  | json_encode }} -->
+<!-- raw_center type={{ _raw_center is iterable ? 'array' : 'scalar' }} json={{ _raw_center | json_encode }} -->
+<!-- raw_end    type={{ _raw_end    is iterable ? 'array' : 'scalar' }} json={{ _raw_end    | json_encode }} -->
+<!-- resolved   start={{ slot_start }} center={{ slot_center }} end={{ slot_end }} -->
+<!-- HEADER DEBUG ▲ -->
 
 {# ══════════════════════════════════════════════════════════════
    HEADER ELEMENT
