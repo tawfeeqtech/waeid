@@ -1350,334 +1350,477 @@
         {
             "key": "f03939dc-db0d-4be0-92c3-4fd7f6dc5740",
             "title": {
-                "en": "Hero Section Matrix",
-                "ar": "قسم الهيرو الذكي"
+                "en": "Hero (Dynamic)",
+                "ar": "الهيرو الديناميكي"
             },
-            "icon": "sicon-image-carousel",
+            "icon": "sicon-layout-grid",
             "path": "home.hero",
             "fields": [
                 {
                     "type": "static",
                     "format": "description",
-                    "id": "hero-matrix-desc",
-                    "value": "<div style='background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);border-radius:12px;padding:16px;margin-bottom:12px;text-align:center'><h6 style='color:#fff;font-weight:bold;margin:0 0 6px'>🚀 Hero Section Matrix</h6><p style='color:#a0c4cc;font-size:12px;margin:0'>4 تصاميم جاهزة — قابلة للتخصيص الكامل من لوحة التحكم</p></div>"
+                    "id": "hero-v2-desc",
+                    "value": "<div style='background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);border-radius:12px;padding:14px;text-align:center;color:#fff'><h6 style='margin:0 0 4px;font-weight:bold'>Dynamic Hero v2</h6><p style='margin:0;color:#a0c4cc;font-size:12px'>2000+ combinations from 5 axes — without code duplication</p></div>"
                 },
                 {
-                    "id": "variant",
+                    "id": "layout_mode",
                     "type": "items",
                     "format": "dropdown-list",
-                    "label": "نمط التصميم (Variant)",
-                    "description": "اختر شكل قسم الهيرو",
+                    "label": "نمط التخطيط (Layout)",
                     "icon": "sicon-layout-grid",
+                    "source": "Manual",
+                    "required": false,
                     "selected": [
                         {
-                            "label": "محتوى في المنتصف (Centered)",
-                            "value": "centered",
-                            "key": "hero-variant-centered"
+                            "label": "مكدس - Stacked",
+                            "value": "stacked",
+                            "key": "lm-stacked"
                         }
                     ],
                     "options": [
                         {
-                            "label": "محتوى في المنتصف (Centered)",
-                            "value": "centered",
-                            "key": "hero-variant-centered"
+                            "label": "مكدس - Stacked",
+                            "value": "stacked",
+                            "key": "lm-stacked"
                         },
                         {
-                            "label": "محتوى وصورة جنباً لجنب (Split)",
+                            "label": "منقسم - Split",
                             "value": "split",
-                            "key": "hero-variant-split"
+                            "key": "lm-split"
                         },
                         {
-                            "label": "خلفية فيديو (Video Background)",
-                            "value": "video",
-                            "key": "hero-variant-video"
+                            "label": "بطاقة فوق صورة - Overlay",
+                            "value": "overlay-card",
+                            "key": "lm-overlay"
                         },
                         {
-                            "label": "بطاقة فوق الصورة (Overlay Card)",
-                            "value": "overlay",
-                            "key": "hero-variant-overlay"
+                            "label": "مينيمال - Minimal",
+                            "value": "minimal",
+                            "key": "lm-minimal"
+                        },
+                        {
+                            "label": "شريطي - Banded",
+                            "value": "banded",
+                            "key": "lm-banded"
+                        },
+                        {
+                            "label": "كامل العرض - Full Bleed",
+                            "value": "full-bleed",
+                            "key": "lm-fullbleed"
                         }
-                    ],
-                    "source": "Manual",
-                    "required": true
+                    ]
                 },
                 {
-                    "type": "string",
+                    "id": "media_type",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "نوع الوسائط (Media)",
+                    "icon": "sicon-image",
+                    "source": "Manual",
+                    "required": false,
+                    "selected": [
+                        {
+                            "label": "صورة",
+                            "value": "image",
+                            "key": "mt-image"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "صورة",
+                            "value": "image",
+                            "key": "mt-image"
+                        },
+                        {
+                            "label": "فيديو يوتيوب",
+                            "value": "video",
+                            "key": "mt-video"
+                        },
+                        {
+                            "label": "تدرج لوني",
+                            "value": "gradient",
+                            "key": "mt-gradient"
+                        },
+                        {
+                            "label": "نقش",
+                            "value": "pattern",
+                            "key": "mt-pattern"
+                        },
+                        {
+                            "label": "بدون",
+                            "value": "none",
+                            "key": "mt-none"
+                        }
+                    ]
+                },
+                {
+                    "id": "alignment",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "محاذاة المحتوى (Alignment)",
                     "icon": "sicon-format-text-alt",
-                    "label": "نص الشارة (Badge)",
-                    "description": "نص صغير يظهر فوق العنوان مثل 'مدرب معتمد ✓'",
+                    "source": "Manual",
+                    "required": false,
+                    "selected": [
+                        {
+                            "label": "المنتصف",
+                            "value": "center",
+                            "key": "al-center"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "البداية (يمين بالعربي)",
+                            "value": "start",
+                            "key": "al-start"
+                        },
+                        {
+                            "label": "المنتصف",
+                            "value": "center",
+                            "key": "al-center"
+                        },
+                        {
+                            "label": "النهاية (يسار بالعربي)",
+                            "value": "end",
+                            "key": "al-end"
+                        }
+                    ]
+                },
+                {
+                    "id": "emphasis",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "التركيز البصري (Emphasis)",
+                    "icon": "sicon-typography",
+                    "source": "Manual",
+                    "required": false,
+                    "selected": [
+                        {
+                            "label": "متوازن",
+                            "value": "balanced",
+                            "key": "em-balanced"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "متوازن",
+                            "value": "balanced",
+                            "key": "em-balanced"
+                        },
+                        {
+                            "label": "يبرز النص",
+                            "value": "text",
+                            "key": "em-text"
+                        },
+                        {
+                            "label": "تبرز الوسائط",
+                            "value": "media",
+                            "key": "em-media"
+                        },
+                        {
+                            "label": "تبرز الإحصائيات",
+                            "value": "stats",
+                            "key": "em-stats"
+                        }
+                    ]
+                },
+                {
+                    "id": "cta_style",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "نمط الأزرار (CTA Style)",
+                    "icon": "sicon-link",
+                    "source": "Manual",
+                    "required": false,
+                    "selected": [
+                        {
+                            "label": "صلب",
+                            "value": "solid",
+                            "key": "cta-solid"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "صلب",
+                            "value": "solid",
+                            "key": "cta-solid"
+                        },
+                        {
+                            "label": "محدد",
+                            "value": "outline",
+                            "key": "cta-outline"
+                        },
+                        {
+                            "label": "شفاف خفيف",
+                            "value": "ghost",
+                            "key": "cta-ghost"
+                        },
+                        {
+                            "label": "حبة دواء",
+                            "value": "pill",
+                            "key": "cta-pill"
+                        },
+                        {
+                            "label": "مربع",
+                            "value": "square",
+                            "key": "cta-square"
+                        },
+                        {
+                            "label": "زران متباينان",
+                            "value": "dual-pill",
+                            "key": "cta-dual"
+                        }
+                    ]
+                },
+                {
+                    "id": "min_height",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "الارتفاع الأدنى",
+                    "icon": "sicon-layout-grid",
+                    "source": "Manual",
+                    "required": false,
+                    "selected": [
+                        {
+                            "label": "كبير (720px)",
+                            "value": "large",
+                            "key": "mh-large"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "تلقائي",
+                            "value": "auto",
+                            "key": "mh-auto"
+                        },
+                        {
+                            "label": "صغير (420px)",
+                            "value": "small",
+                            "key": "mh-small"
+                        },
+                        {
+                            "label": "متوسط (560px)",
+                            "value": "medium",
+                            "key": "mh-medium"
+                        },
+                        {
+                            "label": "كبير (720px)",
+                            "value": "large",
+                            "key": "mh-large"
+                        },
+                        {
+                            "label": "ملء الشاشة",
+                            "value": "screen",
+                            "key": "mh-screen"
+                        }
+                    ]
+                },
+                {
+                    "id": "container_width",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "عرض الحاوية",
+                    "icon": "sicon-layout-grid",
+                    "source": "Manual",
+                    "required": false,
+                    "selected": [
+                        {
+                            "label": "محتوى (1200px)",
+                            "value": "contained",
+                            "key": "cw-contained"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "ضيق (720px)",
+                            "value": "narrow",
+                            "key": "cw-narrow"
+                        },
+                        {
+                            "label": "محتوى (1200px)",
+                            "value": "contained",
+                            "key": "cw-contained"
+                        },
+                        {
+                            "label": "واسع (1440px)",
+                            "value": "wide",
+                            "key": "cw-wide"
+                        },
+                        {
+                            "label": "كامل العرض",
+                            "value": "full",
+                            "key": "cw-full"
+                        }
+                    ]
+                },
+                {
+                    "id": "text_color",
+                    "type": "string",
+                    "format": "color",
+                    "label": "لون النص (اختياري)",
+                    "icon": "sicon-typography",
+                    "required": false
+                },
+                {
+                    "id": "bg_color",
+                    "type": "string",
+                    "format": "color",
+                    "label": "لون الخلفية (اختياري)",
+                    "icon": "sicon-color-fill",
+                    "required": false
+                },
+                {
+                    "id": "overlay_color",
+                    "type": "string",
+                    "format": "color",
+                    "label": "لون التراكب",
+                    "icon": "sicon-color-fill",
+                    "required": false,
+                    "value": "#000000"
+                },
+                {
+                    "id": "overlay_opacity",
+                    "type": "number",
+                    "format": "integer",
+                    "label": "شفافية التراكب (0-100)",
+                    "icon": "sicon-toggle-off",
+                    "required": false,
+                    "value": 40,
+                    "minLength": 0,
+                    "maxLength": 100
+                },
+                {
                     "id": "badge_text",
+                    "type": "string",
                     "format": "text",
+                    "label": "نص الشارة",
+                    "icon": "sicon-format-text-alt",
                     "multilanguage": true,
                     "required": false,
-                    "placeholder": "مدرب معتمد ✓",
+                    "placeholder": "مدرب معتمد",
                     "value": {
-                        "ar": "مدرب معتمد ✓",
-                        "en": "Certified Coach ✓"
+                        "ar": "مدرب معتمد",
+                        "en": "Certified Coach"
                     }
                 },
                 {
-                    "type": "string",
-                    "icon": "sicon-typography",
-                    "label": "العنوان الرئيسي",
                     "id": "title",
+                    "type": "string",
                     "format": "text",
+                    "label": "العنوان الرئيسي",
+                    "icon": "sicon-typography",
                     "multilanguage": true,
                     "required": true,
-                    "placeholder": "حوّل حياتك في 90 يوماً",
-                    "minLength": 1,
-                    "maxLength": 100,
                     "value": {
-                        "ar": "حوّل حياتك في 90 يوماً",
+                        "ar": "حول حياتك في 90 يوما",
                         "en": "Transform Your Life in 90 Days"
                     }
                 },
                 {
-                    "type": "string",
-                    "icon": "sicon-format-text-alt",
-                    "label": "النص الداعم (Subtitle)",
                     "id": "subtitle",
+                    "type": "string",
                     "format": "textarea",
+                    "label": "النص الداعم",
+                    "icon": "sicon-format-text-alt",
                     "multilanguage": true,
                     "required": false,
-                    "placeholder": "برنامج تدريبي متكامل يضمن لك نتائج حقيقية",
                     "value": {
                         "ar": "برنامج تدريبي متكامل يضمن لك نتائج حقيقية",
                         "en": "A complete training program that guarantees real results"
                     }
                 },
                 {
-                    "type": "string",
-                    "icon": "sicon-link",
-                    "label": "نص زر CTA الرئيسي",
                     "id": "cta_text",
+                    "type": "string",
                     "format": "text",
+                    "label": "نص زر CTA الرئيسي",
+                    "icon": "sicon-link",
                     "multilanguage": true,
                     "required": false,
-                    "placeholder": "احجز مكانك الآن",
                     "value": {
                         "ar": "احجز مكانك الآن",
                         "en": "Book Your Spot Now"
                     }
                 },
                 {
-                    "type": "string",
-                    "icon": "sicon-link",
-                    "label": "رابط زر CTA الرئيسي",
                     "id": "cta_url",
+                    "type": "string",
                     "format": "text",
-                    "required": false,
-                    "placeholder": "https://..."
+                    "label": "رابط CTA الرئيسي",
+                    "icon": "sicon-link",
+                    "required": false
                 },
                 {
-                    "type": "string",
-                    "icon": "sicon-link",
-                    "label": "نص الزر الثانوي",
                     "id": "sec_cta_text",
-                    "format": "text",
-                    "multilanguage": true,
-                    "required": false,
-                    "placeholder": "تعرف على البرنامج",
-                    "value": {
-                        "ar": "تعرف على البرنامج",
-                        "en": "Learn More"
-                    }
-                },
-                {
                     "type": "string",
+                    "format": "text",
+                    "label": "نص الزر الثانوي",
                     "icon": "sicon-link",
-                    "label": "رابط الزر الثانوي",
+                    "multilanguage": true,
+                    "required": false
+                },
+                {
                     "id": "sec_cta_url",
+                    "type": "string",
                     "format": "text",
-                    "required": false,
-                    "placeholder": "https://..."
+                    "label": "رابط الزر الثانوي",
+                    "icon": "sicon-link",
+                    "required": false
                 },
                 {
-                    "type": "string",
-                    "icon": "sicon-image",
-                    "label": "الصورة (Hero Image / Poster)",
-                    "description": "المقاس المثالي: 1920×1080 بكسل. تُستخدم كخلفية أو نصف الشاشة في Split",
                     "id": "image",
-                    "format": "image",
-                    "required": false
-                },
-                {
                     "type": "string",
-                    "icon": "sicon-youtube",
-                    "label": "معرف فيديو يوتيوب أو رابط mp4",
-                    "description": "للنمط Video فقط. أدخل ID يوتيوب (مثل dQw4w9WgXcQ) أو رابط .mp4 مباشر",
+                    "format": "image",
+                    "label": "صورة الخلفية / الجانب",
+                    "icon": "sicon-image",
+                    "required": false
+                },
+                {
                     "id": "video_id",
+                    "type": "string",
                     "format": "text",
+                    "label": "معرف فيديو يوتيوب",
+                    "icon": "sicon-video",
                     "required": false,
-                    "placeholder": "dQw4w9WgXcQ أو https://.../video.mp4"
+                    "placeholder": "dQw4w9WgXcQ"
                 },
                 {
-                    "id": "overlay_opacity",
-                    "type": "number",
-                    "label": "درجة شفافية طبقة الظلام (0-100)",
-                    "description": "كلما زادت القيمة، كلما أصبحت الخلفية أداكن",
-                    "icon": "sicon-brightness",
-                    "format": "number",
-                    "required": false,
-                    "value": 55,
-                    "min": 0,
-                    "max": 100
-                },
-                {
-                    "id": "min_height",
-                    "type": "items",
-                    "format": "dropdown-list",
-                    "label": "ارتفاع القسم",
-                    "icon": "sicon-resize-vertical",
-                    "selected": [
-                        {
-                            "label": "كبير",
-                            "value": "large",
-                            "key": "hero-h-large"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "label": "تلقائي (Auto)",
-                            "value": "auto",
-                            "key": "hero-h-auto"
-                        },
-                        {
-                            "label": "متوسط (500px+)",
-                            "value": "medium",
-                            "key": "hero-h-medium"
-                        },
-                        {
-                            "label": "كبير (680px+)",
-                            "value": "large",
-                            "key": "hero-h-large"
-                        },
-                        {
-                            "label": "ملء الشاشة (100vh)",
-                            "value": "screen",
-                            "key": "hero-h-screen"
-                        }
-                    ],
-                    "source": "Manual",
-                    "required": true
-                },
-                {
-                    "id": "split_direction",
-                    "type": "items",
-                    "format": "dropdown-list",
-                    "label": "موضع الصورة في نمط Split",
-                    "description": "أيهما يظهر أولاً: المحتوى أم الصورة؟",
-                    "icon": "sicon-layout-grid",
-                    "selected": [
-                        {
-                            "label": "الصورة في النهاية (يسار في العربية)",
-                            "value": "media-end",
-                            "key": "hero-split-end"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "label": "الصورة في البداية (يمين في العربية)",
-                            "value": "media-start",
-                            "key": "hero-split-start"
-                        },
-                        {
-                            "label": "الصورة في النهاية (يسار في العربية)",
-                            "value": "media-end",
-                            "key": "hero-split-end"
-                        }
-                    ],
-                    "source": "Manual",
-                    "required": false
-                },
-                {
-                    "id": "content_position",
-                    "type": "items",
-                    "format": "dropdown-list",
-                    "label": "موضع بطاقة المحتوى (Overlay فقط)",
-                    "icon": "sicon-layout-grid",
-                    "selected": [
-                        {
-                            "label": "البداية (يمين في العربية)",
-                            "value": "start",
-                            "key": "hero-pos-start"
-                        }
-                    ],
-                    "options": [
-                        {
-                            "label": "البداية (يمين في العربية)",
-                            "value": "start",
-                            "key": "hero-pos-start"
-                        },
-                        {
-                            "label": "المنتصف",
-                            "value": "center",
-                            "key": "hero-pos-center"
-                        },
-                        {
-                            "label": "النهاية (يسار في العربية)",
-                            "value": "end",
-                            "key": "hero-pos-end"
-                        }
-                    ],
-                    "source": "Manual",
-                    "required": false
-                },
-                {
-                    "type": "boolean",
-                    "icon": "sicon-toggle-off",
-                    "label": "عرض الإحصائيات (Stats Row)",
-                    "description": "أرقام المشتركين، سنوات الخبرة، إلخ",
                     "id": "show_stats",
+                    "type": "boolean",
                     "format": "switch",
+                    "label": "اظهار الاحصائيات",
+                    "icon": "sicon-bar-chart",
                     "required": false,
-                    "value": true,
-                    "selected": true
+                    "value": false
                 },
                 {
                     "id": "stats",
-                    "type": "collection",
-                    "format": "collection",
+                    "type": "array",
+                    "label": "الاحصائيات",
+                    "icon": "sicon-bar-chart",
                     "required": false,
-                    "minLength": 0,
-                    "maxLength": 4,
-                    "label": null,
-                    "item_label": "إحصائية",
-                    "value": [
-                        {
-                            "stats.stat_number": "+500",
-                            "stats.stat_label": "عميل ناجح"
-                        },
-                        {
-                            "stats.stat_number": "+10",
-                            "stats.stat_label": "سنوات خبرة"
-                        },
-                        {
-                            "stats.stat_number": "98%",
-                            "stats.stat_label": "نسبة الرضا"
-                        }
-                    ],
                     "fields": [
                         {
+                            "id": "stat_number",
                             "type": "string",
-                            "icon": "sicon-format-text-alt",
-                            "label": "الرقم / القيمة",
-                            "id": "stats.stat_number",
                             "format": "text",
-                            "required": true,
-                            "placeholder": "+500",
-                            "maxLength": 20
+                            "label": "الرقم",
+                            "multilanguage": true,
+                            "value": {
+                                "ar": "+1000",
+                                "en": "+1000"
+                            }
                         },
                         {
+                            "id": "stat_label",
                             "type": "string",
-                            "icon": "sicon-typography",
-                            "label": "التسمية",
-                            "id": "stats.stat_label",
                             "format": "text",
+                            "label": "الوصف",
                             "multilanguage": true,
-                            "required": true,
-                            "placeholder": "عميل ناجح",
-                            "maxLength": 40
+                            "value": {
+                                "ar": "متدرب",
+                                "en": "Trainees"
+                            }
                         }
                     ]
                 }

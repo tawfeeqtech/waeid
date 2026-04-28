@@ -1,374 +1,186 @@
 {#
- | Hero Section Matrix v1.0
- | ========================
- | 4 layout variants, fully configurable from Salla dashboard.
+ | Hero System v2.0 — Dynamic Combinatorial
+ | =========================================
+ | NO fixed variants. Hero composes from 5 independent axes:
  |
- | VARIANTS
- |   centered  Full-width bg image, content centered on overlay
- |   split     Two-column: content + media (RTL-aware direction)
- |   video     YouTube / native video background with content overlay
- |   overlay   Full-bleed image, content in a floating card
+ |   layout_mode  : stacked | split | overlay-card | minimal | banded | full-bleed
+ |   media_type   : image | video | gradient | pattern | none
+ |   alignment    : start | center | end       (logical — RTL safe)
+ |   emphasis     : text | media | stats | balanced
+ |   cta_style    : solid | outline | ghost | pill | square | dual-pill
  |
- | PERFORMANCE RULES (LCP target < 2.5 s)
- |   - Hero image uses loading="eager" + fetchpriority="high"
- |   - Salla CDN filter: | resize(1920,1080) | cdn
- |   - Video variant: poster image loaded immediately, video deferred
- |   - No external JS libraries beyond Alpine.js (already loaded)
+ | Plus continuous overrides: text_color, bg_color, overlay_color,
+ | overlay_opacity (0-100), min_height, container_width.
  |
- | COMPONENT FIELD VARIABLES (injected by Salla when rendering)
- |   variant          string   centered|split|video|overlay
- |   badge_text       string   Small pill above the headline
- |   title            string   Main headline (multilanguage)
- |   subtitle         string   Supporting text
- |   cta_text         string   Primary CTA label
- |   cta_url          string   Primary CTA href
- |   sec_cta_text     string   Secondary CTA label
- |   sec_cta_url      string   Secondary CTA href
- |   image            string   Hero image URL
- |   video_id         string   YouTube video ID or direct .mp4 URL
- |   overlay_opacity  int      0-100 (default 50)
- |   min_height       string   auto|medium|large|screen
- |   split_direction  string   media-start|media-end
- |   show_stats       bool     Show coach statistics row
- |   stats[]          array    [{stat_number, stat_label}]
+ | All styling driven by data-* attributes + scoped CSS variables.
+ | Zero {% if variant == 'x' %} branches.
  #}
 
-{# ══════════════════════════════════════════════════════════════
-   PULL FIELDS FROM `component` NAMESPACE
-   ──────────────────────────────────────────────────────────────
-   In Salla, registered components receive their fields under
-   `component.*`, NOT as top-level variables.
-   The `variant` field is type=items/dropdown-list → array of objects.
-   ══════════════════════════════════════════════════════════════ #}
-{% set _raw_variant = component.variant %}
-{% set v_variant = 'centered' %}
-{% if _raw_variant is iterable and _raw_variant|length > 0 %}
-  {% set _f = _raw_variant|first %}
-  {% set v_variant = (_f is iterable) ? (attribute(_f, 'value') | default('centered')) : (_f | default('centered')) %}
-{% elseif _raw_variant is not empty %}
-  {% set v_variant = _raw_variant %}
-{% endif %}
-
-{% set badge_text   = component.badge_text %}
-{% set title        = component.title %}
-{% set subtitle     = component.subtitle %}
-{% set cta_text     = component.cta_text %}
-{% set cta_url      = component.cta_url %}
-{% set sec_cta_text = component.sec_cta_text %}
-{% set sec_cta_url  = component.sec_cta_url %}
-{% set image        = component.image %}
-{% set video_id     = component.video_id %}
-{% set show_stats   = component.show_stats %}
-{% set stats        = component.stats | default([]) %}
-
-{% set v_height    = component.min_height       | default('large') %}
-{% set v_opacity   = component.overlay_opacity  | default(55) %}
-{% set v_split_dir = component.split_direction  | default('media-end') %}
-{% set v_image     = image                      | default('') %}
-{% set v_video_id  = video_id                   | default('') %}
-
-{# ── Debug — remove after confirming it works ── #}
-<!-- HERO DEBUG ▼ -->
-<!-- v_variant  = {{ v_variant  | json_encode }} -->
-<!-- title      = {{ title      | json_encode }} -->
-<!-- subtitle   = {{ subtitle   | json_encode }} -->
-<!-- badge_text = {{ badge_text | json_encode }} -->
-<!-- cta_text   = {{ cta_text   | json_encode }} -->
-<!-- image      = {{ image      | json_encode }} -->
-<!-- HERO DEBUG ▲ -->
-
-{# ── Height class map ─────────────────────────────────────────── #}
-{% set height_class = {
-    'auto':   'py-20 lg:py-28',
-    'medium': 'min-h-[500px] lg:min-h-[580px]',
-    'large':  'min-h-[680px] lg:min-h-[780px]',
-    'screen': 'min-h-screen'
-} %}
-{% set h_cls = height_class[v_height] | default(height_class['large']) %}
-
-{# ── Overlay opacity (0-100 → 0.0-1.0) ───────────────────────── #}
-{% set overlay_alpha = (v_opacity / 100) %}
-
-{# ══════════════════════════════════════════════════════════════
-   SHARED CONTENT BLOCK MACRO
-   Renders: badge · title · subtitle · stats · CTAs
-   ══════════════════════════════════════════════════════════════ #}
-{% macro hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, on_dark) %}
-  {% set text_color = on_dark ? 'text-white' : 'text-gray-900' %}
-  {% set sub_color  = on_dark ? 'text-white/80' : 'text-gray-600' %}
-
-  <div class="hero-content-block">
-
-    {# ── Badge ──────────────────────────────────────────────── #}
-    {% if badge_text %}
-      <div class="hero-badge">
-        <span class="hero-badge__dot"></span>
-        <span>{{ badge_text }}</span>
-      </div>
-    {% endif %}
-
-    {# ── Headline ───────────────────────────────────────────── #}
-    {% if title %}
-      <h1 class="hero-title {{ text_color }}">{{ title }}</h1>
-    {% endif %}
-
-    {# ── Subtitle ───────────────────────────────────────────── #}
-    {% if subtitle %}
-      <p class="hero-subtitle {{ sub_color }}">{{ subtitle }}</p>
-    {% endif %}
-
-    {# ── Statistics Row ─────────────────────────────────────── #}
-    {% if show_stats and stats | length > 0 %}
-      <div class="hero-stats">
-        {% for stat in stats %}
-          <div class="hero-stat {{ on_dark ? 'hero-stat--light' : '' }}">
-            <span class="hero-stat__number">{{ stat.stat_number }}</span>
-            <span class="hero-stat__label {{ sub_color }}">{{ stat.stat_label }}</span>
-          </div>
-          {# Divider between stats (not after last) #}
-          {% if not loop.last %}
-            <div class="hero-stat-divider {{ on_dark ? 'bg-white/20' : 'bg-gray-200' }}"></div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    {# ── CTA Buttons ────────────────────────────────────────── #}
-    {% if cta_text or sec_cta_text %}
-      <div class="hero-ctas">
-        {% if cta_text %}
-          <a href="{{ cta_url | default('#') }}" class="hero-btn hero-btn--primary">
-            <span>{{ cta_text }}</span>
-            <i class="sicon-arrow-left rtl:inline-block ltr:hidden text-sm"></i>
-            <i class="sicon-arrow-right ltr:inline-block rtl:hidden text-sm"></i>
-          </a>
-        {% endif %}
-        {% if sec_cta_text %}
-          <a href="{{ sec_cta_url | default('#') }}" class="hero-btn hero-btn--secondary {{ on_dark ? 'hero-btn--secondary-light' : '' }}">
-            {{ sec_cta_text }}
-          </a>
-        {% endif %}
-      </div>
-    {% endif %}
-
-  </div>
+{# ── 1) Pull axes from `component.*` (Salla namespace) ─────────── #}
+{% macro pick(raw, fallback) %}
+  {%- if raw is iterable and raw|length > 0 -%}
+    {%- set f = raw|first -%}
+    {%- if f is iterable -%}{{ attribute(f, 'value') | default(fallback) }}
+    {%- else -%}{{ f | default(fallback) }}
+    {%- endif -%}
+  {%- elseif raw is not empty -%}{{ raw }}
+  {%- else -%}{{ fallback }}{%- endif -%}
 {% endmacro %}
 
-{# ══════════════════════════════════════════════════════════════
-   VARIANT 1: CENTERED
-   Full-width section · Background image · Centered overlay text
-   ══════════════════════════════════════════════════════════════ #}
-{% if v_variant == 'centered' %}
+{% import _self as h %}
 
+{% set layout    = h.pick(component.layout_mode,  'stacked')   | trim %}
+{% set media     = h.pick(component.media_type,   'image')     | trim %}
+{% set align     = h.pick(component.alignment,    'center')    | trim %}
+{% set emphasis  = h.pick(component.emphasis,     'balanced')  | trim %}
+{% set cta_sty   = h.pick(component.cta_style,    'solid')     | trim %}
+{% set min_h_key = h.pick(component.min_height,   'large')     | trim %}
+{% set width_key = h.pick(component.container_width, 'contained') | trim %}
+
+{# ── 2) Content fields ─────────────────────────────────────────── #}
+{% set badge       = component.badge_text   %}
+{% set title       = component.title        %}
+{% set subtitle    = component.subtitle     %}
+{% set cta_txt     = component.cta_text     %}
+{% set cta_url     = component.cta_url      %}
+{% set sec_txt     = component.sec_cta_text %}
+{% set sec_url     = component.sec_cta_url  %}
+{% set image       = component.image        %}
+{% set video_id    = component.video_id     %}
+{% set show_stats  = component.show_stats   %}
+{% set stats       = component.stats | default([]) %}
+
+{# ── 3) Color & overlay overrides ──────────────────────────────── #}
+{% set c_text    = component.text_color    | default('') %}
+{% set c_bg      = component.bg_color      | default('') %}
+{% set c_over    = component.overlay_color | default('#000000') %}
+{% set c_alpha   = (component.overlay_opacity | default(40)) / 100 %}
+
+{# ── 4) Height & width tables ──────────────────────────────────── #}
+{% set h_map = {
+  'auto':   'auto',
+  'small':  '420px',
+  'medium': '560px',
+  'large':  '720px',
+  'screen': '100vh'
+} %}
+{% set w_map = {
+  'narrow':    '720px',
+  'contained': '1200px',
+  'wide':      '1440px',
+  'full':      '100%'
+} %}
+{% set v_min_h = h_map[min_h_key] | default('720px') %}
+{% set v_width = w_map[width_key] | default('1200px') %}
+
+{# ── 5) Style payload — scoped CSS vars ────────────────────────── #}
+{% set style_payload %}
+  --hero-min-h: {{ v_min_h }};
+  --hero-max-w: {{ v_width }};
+  --hero-overlay: {{ c_over }};
+  --hero-overlay-alpha: {{ c_alpha }};
+  {% if c_text %}--hero-text: {{ c_text }};{% endif %}
+  {% if c_bg %}--hero-bg: {{ c_bg }};{% endif %}
+{% endset %}
+
+{# ══════════════════════════════════════════════════════════════════
+   ONE section, all axes encoded as data-* — CSS does the variant work.
+   ══════════════════════════════════════════════════════════════════ #}
 <section
-  class="hero-section hero-section--centered relative flex items-center justify-center overflow-hidden {{ h_cls }}"
+  class="hero"
+  data-layout="{{ layout }}"
+  data-media="{{ media }}"
+  data-align="{{ align }}"
+  data-emphasis="{{ emphasis }}"
+  data-cta="{{ cta_sty }}"
+  style="{{ style_payload | spaceless }}"
   aria-label="{{ title | default('Hero') }}"
+  {% if media == 'video' and video_id %}x-data="{ vRdy: false }" x-init="$nextTick(()=>vRdy=true)"{% endif %}
 >
-  {# Background Image — LCP critical, eager + high priority #}
-  {% if v_image %}
-    <img
-      class="hero-bg-img absolute inset-0 w-full h-full object-cover"
-      src="{{ v_image | cdn(1920) }}"
-      alt=""
-      role="presentation"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    >
-  {% else %}
-    {# Fallback gradient when no image set #}
-    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-700"></div>
+
+  {# ── Media layer (only renders when relevant) ── #}
+  {% if media == 'image' and image %}
+    <img class="hero__bg"
+         src="{{ image | cdn(1920) }}"
+         alt=""
+         role="presentation"
+         loading="eager"
+         fetchpriority="high"
+         decoding="async">
+
+  {% elseif media == 'video' and video_id %}
+    <img class="hero__bg" src="{{ image | cdn(1920) }}" alt="" loading="eager" fetchpriority="high">
+    <template x-if="vRdy">
+      <iframe class="hero__video"
+              src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1&mute=1&loop=1&controls=0&playlist={{ video_id }}&playsinline=1"
+              frameborder="0" allow="autoplay; encrypted-media" tabindex="-1" aria-hidden="true"></iframe>
+    </template>
+
+  {% elseif media == 'gradient' %}
+    <div class="hero__bg hero__bg--gradient" aria-hidden="true"></div>
+
+  {% elseif media == 'pattern' %}
+    <div class="hero__bg hero__bg--pattern" aria-hidden="true"></div>
   {% endif %}
 
-  {# Overlay #}
-  <div
-    class="absolute inset-0 bg-black"
-    style="opacity: {{ overlay_alpha }}"
-    aria-hidden="true"
-  ></div>
+  {# ── Overlay (skipped if alpha=0 or layout=overlay-card to keep card crisp) ── #}
+  {% if c_alpha > 0 and layout != 'overlay-card' and media != 'none' %}
+    <div class="hero__overlay" aria-hidden="true"></div>
+  {% endif %}
 
-  {# Content #}
-  <div class="container relative z-10 text-center">
-    {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, true) }}
-  </div>
-</section>
+  {# ── Content shell ── #}
+  <div class="hero__shell">
+    <div class="hero__content {{ layout == 'overlay-card' ? 'hero__content--card' : '' }}">
 
+      {% if badge %}
+        <span class="hero__badge">
+          <span class="hero__badge-dot" aria-hidden="true"></span>{{ badge }}
+        </span>
+      {% endif %}
 
-{# ══════════════════════════════════════════════════════════════
-   VARIANT 2: SPLIT
-   Two-column layout · Content + Media side by side
-   RTL/LTR aware via split_direction setting
-   ══════════════════════════════════════════════════════════════ #}
-{% elseif v_variant == 'split' %}
+      {% if title %}
+        <h1 class="hero__title">{{ title }}</h1>
+      {% endif %}
 
-<section
-  class="hero-section hero-section--split overflow-hidden"
-  aria-label="{{ title | default('Hero') }}"
->
-  {#
-   | Grid columns: content | media
-   | split_direction = "media-end"   → content start, image end  (RTL: content right, image left)
-   | split_direction = "media-start" → image start,   content end (RTL: image right, content left)
-   #}
-  <div class="hero-split-grid {{ v_split_dir == 'media-start' ? 'hero-split-grid--media-first' : '' }}">
+      {% if subtitle %}
+        <p class="hero__subtitle">{{ subtitle }}</p>
+      {% endif %}
 
-    {# ── Content Column ──────────────────────────────────────── #}
-    <div class="hero-split__content {{ h_cls }} flex items-center">
-      <div class="hero-split__content-inner">
-        {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, false) }}
-      </div>
-    </div>
-
-    {# ── Media Column ────────────────────────────────────────── #}
-    <div class="hero-split__media relative overflow-hidden">
-      {% if v_image %}
-        <img
-          class="w-full h-full object-cover min-h-[400px] lg:min-h-full"
-          src="{{ v_image | cdn(960) }}"
-          alt="{{ title | default(store.name) }}"
-          loading="eager"
-          fetchpriority="high"
-          decoding="async"
-        >
-      {% else %}
-        <div class="w-full h-full min-h-[400px] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-          <i class="sicon-image text-6xl text-primary/30"></i>
+      {% if show_stats and stats|length > 0 %}
+        <div class="hero__stats" role="list">
+          {% for s in stats %}
+            <div class="hero__stat" role="listitem">
+              <span class="hero__stat-num">{{ s.stat_number }}</span>
+              <span class="hero__stat-lbl">{{ s.stat_label }}</span>
+            </div>
+          {% endfor %}
         </div>
       {% endif %}
 
-      {# Decorative edge fade toward content #}
-      <div class="hero-split__media-fade {{ v_split_dir == 'media-start' ? 'hero-split__media-fade--end' : 'hero-split__media-fade--start' }}"></div>
-    </div>
+      {% if cta_txt or sec_txt %}
+        <div class="hero__ctas">
+          {% if cta_txt %}
+            <a class="hero__cta hero__cta--primary" href="{{ cta_url | default('#') }}">
+              <span>{{ cta_txt }}</span>
+              <i class="sicon-arrow-left rtl:inline-block ltr:hidden text-sm" aria-hidden="true"></i>
+              <i class="sicon-arrow-right ltr:inline-block rtl:hidden text-sm" aria-hidden="true"></i>
+            </a>
+          {% endif %}
+          {% if sec_txt %}
+            <a class="hero__cta hero__cta--secondary" href="{{ sec_url | default('#') }}">
+              <span>{{ sec_txt }}</span>
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
 
-  </div>
+    </div>{# /content #}
+
+    {# Side media slot — used only by layout="split" or "full-bleed" with image #}
+    {% if (layout == 'split' or layout == 'full-bleed') and media == 'image' and image %}
+      <div class="hero__side-media" aria-hidden="true">
+        <img src="{{ image | cdn(960) }}" alt="" loading="eager" fetchpriority="high" decoding="async">
+      </div>
+    {% endif %}
+  </div>{# /shell #}
 </section>
-
-
-{# ══════════════════════════════════════════════════════════════
-   VARIANT 3: VIDEO
-   YouTube / native video background · Content overlay
-   Poster image loads immediately (LCP) · Video deferred via Alpine
-   ══════════════════════════════════════════════════════════════ #}
-{% elseif v_variant == 'video' %}
-
-<section
-  class="hero-section hero-section--video relative flex items-center justify-center overflow-hidden {{ h_cls }}"
-  aria-label="{{ title | default('Hero') }}"
-  x-data="{ videoReady: false }"
-  x-init="$nextTick(() => { videoReady = true })"
->
-
-  {# Poster / Fallback image — loads immediately as LCP element #}
-  {% if v_image %}
-    <img
-      class="hero-bg-img absolute inset-0 w-full h-full object-cover"
-      :class="videoReady ? 'opacity-0' : 'opacity-100'"
-      style="transition: opacity 0.8s ease"
-      src="{{ v_image | cdn(1920) }}"
-      alt=""
-      role="presentation"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    >
-  {% endif %}
-
-  {# ── YouTube Background (iFrame API deferred) ─────────────── #}
-  {% if v_video_id and v_video_id | length <= 20 %}
-    {# Looks like a YouTube ID (not a direct URL) #}
-    <div
-      class="absolute inset-0 pointer-events-none overflow-hidden"
-      x-show="videoReady"
-      style="display:none"
-    >
-      <iframe
-        class="hero-yt-iframe"
-        src="https://www.youtube-nocookie.com/embed/{{ v_video_id }}?autoplay=1&mute=1&loop=1&controls=0&playlist={{ v_video_id }}&playsinline=1&rel=0"
-        allow="autoplay; encrypted-media"
-        allowfullscreen="false"
-        loading="lazy"
-        title="{{ title | default('Hero video') }}"
-      ></iframe>
-    </div>
-
-  {# ── Native .mp4 Video (direct URL) ───────────────────────── #}
-  {% elseif v_video_id %}
-    <video
-      class="absolute inset-0 w-full h-full object-cover"
-      x-show="videoReady"
-      style="display:none"
-      autoplay
-      muted
-      loop
-      playsinline
-      poster="{{ v_image | cdn(1920) }}"
-    >
-      <source src="{{ v_video_id }}" type="video/mp4">
-    </video>
-  {% endif %}
-
-  {# Overlay #}
-  <div
-    class="absolute inset-0 bg-black"
-    style="opacity: {{ overlay_alpha }}"
-    aria-hidden="true"
-  ></div>
-
-  {# Content #}
-  <div class="container relative z-10 text-center">
-    {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, true) }}
-  </div>
-
-</section>
-
-
-{# ══════════════════════════════════════════════════════════════
-   VARIANT 4: OVERLAY
-   Full-bleed background · Content in a floating premium card
-   Card position: start | center | end (logical, RTL-aware)
-   ══════════════════════════════════════════════════════════════ #}
-{% else %} {# variant == 'overlay' #}
-
-{% set card_position = content_position | default('start') %}
-{% set card_align = {
-    'start':  'justify-start',
-    'center': 'justify-center',
-    'end':    'justify-end'
-} %}
-{% set c_align = card_align[card_position] | default(card_align['start']) %}
-
-<section
-  class="hero-section hero-section--overlay relative flex items-center overflow-hidden {{ h_cls }}"
-  aria-label="{{ title | default('Hero') }}"
->
-  {# Background Image — LCP #}
-  {% if v_image %}
-    <img
-      class="hero-bg-img absolute inset-0 w-full h-full object-cover"
-      src="{{ v_image | cdn(1920) }}"
-      alt=""
-      role="presentation"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-    >
-  {% else %}
-    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700"></div>
-  {% endif %}
-
-  {# Subtle dark gradient for readability (not a solid overlay) #}
-  <div
-    class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/50"
-    aria-hidden="true"
-  ></div>
-
-  {# Floating Content Card #}
-  <div class="container relative z-10 flex {{ c_align }} py-10">
-    <div class="hero-overlay-card">
-      {{ _self.hero_content(badge_text, title, subtitle, cta_text, cta_url, sec_cta_text, sec_cta_url, show_stats, stats, false) }}
-    </div>
-  </div>
-
-</section>
-
-{% endif %}
