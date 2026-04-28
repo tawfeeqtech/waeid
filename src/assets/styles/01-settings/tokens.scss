@@ -152,6 +152,14 @@
    Applied via [data-theme="preset"] on <body> from master.twig
    ════════════════════════════════════════════════════════════════ */
 
+/* ── Tailwind bridge: every preset must also override `--color-primary*`
+   (the Tailwind/Salla family) so that classes like `bg-primary`,
+   `text-primary`, `border-primary` follow the preset across the whole
+   theme, not only token-aware components. master.twig writes those
+   vars inline in `<style>` from theme.color.*, so the preset selector
+   wins by attribute-selector specificity (0,1,0 > :root 0,0,1).
+   --------------------------------------------------------------- */
+
 /* ── Preset: energy (red/orange — high-intensity training) ───── */
 [data-theme="energy"] {
   --token-color-primary:       #e84118;
@@ -160,6 +168,11 @@
   --token-color-primary-text:  #ffffff;
   --token-bg-surface-2:        #fff8f6;
   --token-text-accent:         #e84118;
+  /* Tailwind/Salla bridge */
+  --color-primary:             #e84118;
+  --color-primary-dark:        #b71c1c;
+  --color-primary-light:       #ff7043;
+  --color-primary-reverse:     #ffffff;
 }
 
 /* ── Preset: premium (dark + gold — luxury coaching) ─────────── */
@@ -178,6 +191,11 @@
   --token-border-color:        #2e2e2e;
   --token-shadow-sm:           0 2px 8px  rgba(0,0,0,0.5);
   --token-shadow-md:           0 4px 16px rgba(0,0,0,0.6);
+  /* Tailwind/Salla bridge */
+  --color-primary:             #c9a84c;
+  --color-primary-dark:        #a07730;
+  --color-primary-light:       #e8c97a;
+  --color-primary-reverse:     #1a1208;
 }
 
 /* ── Preset: minimal (charcoal + white — clean corporate) ─────── */
@@ -189,6 +207,11 @@
   --token-bg-surface-2:        #f4f4f4;
   --token-radius-btn:          var(--token-radius-sm);
   --token-radius-card:         var(--token-radius-sm);
+  /* Tailwind/Salla bridge */
+  --color-primary:             #1a1a2e;
+  --color-primary-dark:        #0d0d1a;
+  --color-primary-light:       #3a3a5c;
+  --color-primary-reverse:     #ffffff;
 }
 
 /* ── Preset: nature (green + earth — wellness / yoga) ─────────── */
@@ -200,4 +223,9 @@
   --token-bg-surface-2:        #f0faf4;
   --token-text-accent:         #2d6a4f;
   --token-radius-card:         var(--token-radius-xl);
+  /* Tailwind/Salla bridge */
+  --color-primary:             #2d6a4f;
+  --color-primary-dark:        #1b4332;
+  --color-primary-light:       #52b788;
+  --color-primary-reverse:     #ffffff;
 }
